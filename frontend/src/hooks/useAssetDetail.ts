@@ -1,0 +1,93 @@
+import { useParams, useNavigate } from 'react-router-dom';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import api from '../lib/api';
+import type { Asset, Vulnerability } from './useAssets';
+
+const fetchAsset = async (id: string): Promise<Asset> => {
+  const res = await api.get(`/assets/${id}`);
+  return res.data;
+};
+
+const scanAsset = async (id: number): Promise<void> => {
+  await api.post(`/scans/${id}`);
+};
+
+const getReportPDF = async (id: number): Promise<void> => {
+  try {
+    const response = await api.get(`/reports/pdf/${id}`, {
+      responseType: 'blob',
+    });
+    
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `asset_${id}_report.pdf`);
+    document.body.appendChild(link);
+    link.click();
+    
+    link.remove();
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error('Ошибка при скачивании PDF:', error);
+    throw error;
+  }
+};
+
+const getReportCSV = async (id: number): Promise<void> => {
+  try {
+    const response = await api.get(`/reports/csv/${id}`, {
+      responseType: 'blob',
+    });
+    
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `vulnerabilities_asset_${id}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    
+    link.remove();
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error('Ошибка при скачивании CSV:', error);
+    throw error;
+  }
+};
+
+export const useAssetDetail = () => {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  const query = useQuery<Asset>({
+    queryKey: ['asset', id],
+    queryFn: () => fetchAsset(id!),
+    enabled: !!id,
+  });
+
+  const scanMutation = useMutation({
+    mutationFn: () => scanAsset(Number(id)),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['asset', id] });
+    },
+  });
+
+  const maxCriticality = query.data?.vulnerabilities?.length
+    ? query.data.vulnerabilities.reduce((max: Vulnerability['criticality'], v: Vulnerability) => {
+        const order = { low: 0, medium: 1, high: 2, critical: 3 };
+        return order[v.criticality] > order[max] ? v.criticality : max;
+      }, 'low')
+    : 'low';
+
+  return {
+    id,
+    asset: query.data,
+    isLoading: query.isLoading,
+    error: query.error,
+    scanMutation,
+    navigate,
+    maxCriticality,
+    getReportPDF,
+    getReportCSV,
+  };
+};
