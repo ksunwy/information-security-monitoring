@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { ArrowLeftIcon, PlayIcon } from '@heroicons/react/24/outline';
 import { format } from 'date-fns';
 import { useAssetDetail } from '../../hooks/useAssetDetail';
@@ -16,7 +17,24 @@ const AssetDetail = () => {
     maxCriticality,
     getReportPDF,
     getReportCSV,
+    deleteMutation,
+    updateMutation,
   } = useAssetDetail();
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [editForm, setEditForm] = useState({
+    name: asset?.name || "",
+    description: asset?.description || '',
+  });
+
+  useEffect(() => {
+    if (asset) {
+      setEditForm({
+        name: asset.name,
+        description: asset.description || '',
+      });
+    }
+  }, [asset]);
 
   if (isLoading) {
     return <div className="text-center py-20 text-gray-600">Загрузка...</div>;
@@ -46,7 +64,17 @@ const AssetDetail = () => {
                 <ArrowLeftIcon className="w-6 h-6 text-gray-700" />
               </button>
               <div>
-                <h1 className="text-4xl font-bold druk text-gray-900">{asset.name}</h1>
+                {isEditing ? (
+                  <input
+                    value={editForm.name}
+                    onChange={(e) =>
+                      setEditForm((prev) => ({ ...prev, name: e.target.value }))
+                    }
+                    className="text-4xl font-bold druk text-gray-900 bg-white border rounded px-3 py-1"
+                  />
+                ) : (
+                  <h1 className="text-4xl font-bold druk text-gray-900">{asset.name}</h1>
+                )}
                 <p className="text-lg text-gray-600 mt-1">{asset.ip}</p>
               </div>
             </div>
@@ -96,10 +124,24 @@ const AssetDetail = () => {
             </div>
           </div>
 
-          {asset.description && (
+          {(asset.description || isEditing) && (
             <div className="bg-white/90 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-gray-200 mb-10">
               <h3 className="text-lg font-semibold text-gray-800 mb-3">Описание</h3>
-              <p className="text-gray-700">{asset.description}</p>
+
+              {isEditing ? (
+                <textarea
+                  value={editForm.description}
+                  onChange={(e) =>
+                    setEditForm((prev) => ({ ...prev, description: e.target.value }))
+                  }
+                  placeholder="Добавьте описание..."
+                  className="w-full px-4 py-2 border rounded-lg"
+                />
+              ) : (
+                <p className="text-gray-700">
+                  {asset.description || 'Описание отсутствует'}
+                </p>
+              )}
             </div>
           )}
 
@@ -168,6 +210,52 @@ const AssetDetail = () => {
             ) : (
               <p className="text-gray-500">Уязвимостей пока нет</p>
             )}
+          </div>
+          <div className="mt-12 flex items-center gap-3 justify-end">
+            <button
+              onClick={() => setIsEditing(!isEditing)}
+              className="px-6 py-3 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
+            >
+              {isEditing ? 'Отмена' : 'Редактировать'}
+            </button>
+            {isEditing && (
+              <div className="flex gap-4">
+                <button
+                  onClick={() => {
+                    updateMutation.mutate(editForm);
+                    setIsEditing(false);
+                  }}
+                  disabled={updateMutation.isPending}
+                  className="px-6 py-3 bg-[#334E6C] text-white rounded-lg hover:bg-blue-700"
+                >
+                  {updateMutation.isPending ? 'Сохранение...' : 'Сохранить'}
+                </button>
+                {/* 
+                <button
+                  onClick={() => {
+                    setIsEditing(false);
+                    setEditForm({
+                      name: asset.name,
+                      description: asset.description || '',
+                    });
+                  }}
+                  className="px-6 py-2 border rounded-lg"
+                >
+                  Отмена
+                </button> */}
+              </div>
+            )}
+            <button
+              onClick={() => {
+                if (confirm('Ты точно хочешь удалить этот актив?')) {
+                  deleteMutation.mutate();
+                }
+              }}
+              disabled={deleteMutation.isPending}
+              className="px-6 py-3 bg-red-600 text-white rounded-xl hover:bg-red-700 disabled:opacity-50 transition shadow-lg"
+            >
+              {deleteMutation.isPending ? 'Удаление...' : 'Удалить актив'}
+            </button>
           </div>
         </div>
       </section>

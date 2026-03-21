@@ -17,14 +17,14 @@ const getReportPDF = async (id: number): Promise<void> => {
     const response = await api.get(`/reports/pdf/${id}`, {
       responseType: 'blob',
     });
-    
+
     const url = window.URL.createObjectURL(new Blob([response.data]));
     const link = document.createElement('a');
     link.href = url;
     link.setAttribute('download', `asset_${id}_report.pdf`);
     document.body.appendChild(link);
     link.click();
-    
+
     link.remove();
     window.URL.revokeObjectURL(url);
   } catch (error) {
@@ -38,20 +38,29 @@ const getReportCSV = async (id: number): Promise<void> => {
     const response = await api.get(`/reports/csv/${id}`, {
       responseType: 'blob',
     });
-    
+
     const url = window.URL.createObjectURL(new Blob([response.data]));
     const link = document.createElement('a');
     link.href = url;
     link.setAttribute('download', `vulnerabilities_asset_${id}.csv`);
     document.body.appendChild(link);
     link.click();
-    
+
     link.remove();
     window.URL.revokeObjectURL(url);
   } catch (error) {
     console.error('Ошибка при скачивании CSV:', error);
     throw error;
   }
+};
+
+const deleteAsset = async (id: number): Promise<void> => {
+  await api.delete(`/assets/${id}`);
+};
+
+const updateAsset = async (id: number, data: { name: string; description?: string }) => {
+  const res = await api.put(`/assets/${id}`, data);
+  return res.data;
 };
 
 export const useAssetDetail = () => {
@@ -70,14 +79,46 @@ export const useAssetDetail = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['asset', id] });
     },
+    onError: (err: any) => {
+      const message =
+        err?.response?.data?.message ||
+        err?.message ||
+        'Ошибка при запуске сканирования';
+
+      alert(Array.isArray(message) ? message.join('\n') : message);
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: () => deleteAsset(Number(id)),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['assets'] });
+      navigate('/assets');
+    },
   });
 
   const maxCriticality = query.data?.vulnerabilities?.length
     ? query.data.vulnerabilities.reduce((max: Vulnerability['criticality'], v: Vulnerability) => {
-        const order = { low: 0, medium: 1, high: 2, critical: 3 };
-        return order[v.criticality] > order[max] ? v.criticality : max;
-      }, 'low')
+      const order = { low: 0, medium: 1, high: 2, critical: 3 };
+      return order[v.criticality] > order[max] ? v.criticality : max;
+    }, 'low')
     : 'low';
+
+  const updateMutation = useMutation({
+    mutationFn: (data: { name: string; description?: string }) =>
+      updateAsset(Number(id), data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['asset', id] });
+    },
+    onError: (err: any) => {
+      const message =
+        err?.response?.data?.message ||
+        err?.message ||
+        'Ошибка обновления';
+
+      alert(Array.isArray(message) ? message.join('\n') : message);
+    },
+  });
 
   return {
     id,
@@ -89,5 +130,7 @@ export const useAssetDetail = () => {
     maxCriticality,
     getReportPDF,
     getReportCSV,
+    deleteMutation,
+    updateMutation,
   };
 };

@@ -34,8 +34,8 @@ const Assets = () => {
   return (
     <>
       <Header />
-      <section className="relative p-6 max-w-440 mx-auto pt-40 px-10">
-        <img src="/src/assets/bg.jpg" alt="фон" className="absolute top-0 left-0 w-full h-full object-cover z-1 opacity-40" />
+      <img src="/src/assets/bg.jpg" alt="фон" className="absolute top-0 left-0 w-full h-full object-cover z-1 opacity-40" />
+      <section className="relative p-6 max-w-440 min-h-screen mx-auto pt-40 px-10">
         <div className="relative flex justify-between items-center mb-6 z-10">
           <h1 className="text-3xl font-bold druk">АКТИВЫ</h1>
           <Link

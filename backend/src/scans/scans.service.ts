@@ -101,8 +101,8 @@ export class ScansService {
   private async runNmapScan(ip: string, port?: string): Promise<{ openPorts: any[] }> {
     return new Promise((resolve, reject) => {
       const args = port
-        ? `-p ${port}`
-        : '-p-';
+        ? `-p ${port} -n`
+        : '-p- -n';
       const scan = new nmap.NmapScan(ip, args);
 
       scan.on('complete', (data: any[]) => {
@@ -111,6 +111,7 @@ export class ScansService {
       });
 
       scan.on('error', (err: any) => {
+        console.error('NMAP ERROR FULL:', err);
         reject(new BadRequestException(`Ошибка Nmap: ${err.message || 'Неизвестная ошибка'}`));
       });
 

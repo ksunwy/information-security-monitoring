@@ -36,21 +36,53 @@ export const useAssetNew = () => {
     },
   });
 
+  const isValidIP = (value: string) => {
+    const ipRegex =
+      /^(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)$/;
+    return ipRegex.test(value);
+  };
+
+  const isValidDomain = (value: string) => {
+    const domainRegex =
+      /^(?!-)[A-Za-z0-9-]{1,63}(?<!-)\.[A-Za-z]{2,}$/;
+    return domainRegex.test(value);
+  };
+
+  const isValidName = (value: string) => {
+    return /^[a-zA-Zа-яА-ЯёЁ0-9\s-]{3,50}$/.test(value);
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setErrors([]);
 
     const newErrors: string[] = [];
 
-    if (!form.ip.trim()) newErrors.push('IP/Домен обязателен');
-    if (!form.name.trim()) newErrors.push('Имя обязательно');
+    const ip = form.ip.trim();
+    const name = form.name.trim();
+
+    if (!ip) {
+      newErrors.push('IP/Домен обязателен');
+    } else if (!isValidIP(ip) && !isValidDomain(ip)) {
+      newErrors.push('Введите корректный IP или домен (example.com)');
+    }
+
+    if (!name) {
+      newErrors.push('Имя обязательно');
+    } else if (!isValidName(name)) {
+      newErrors.push('Имя должно быть от 3 до 50 символов (буквы, цифры, пробел, -)');
+    }
 
     if (newErrors.length > 0) {
       setErrors(newErrors);
       return;
     }
 
-    mutation.mutate(form);
+    mutation.mutate({
+      ...form,
+      ip,
+      name,
+    });
   };
 
   const handleChange = (field: keyof FormData) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
