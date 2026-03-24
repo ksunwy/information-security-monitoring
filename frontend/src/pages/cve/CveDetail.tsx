@@ -58,22 +58,22 @@ const CveDetail = () => {
     return (
         <>
             <Header />
-            <section className="relative min-h-screen bg-gray-50 pt-30 pb-30">
+            <section className="relative min-h-screen bg-gray-50 py-20 md:pt-30 md:pb-30 px-4 md:px-10">
                 <img
                     src="/src/assets/bg.jpg"
                     alt="фон"
                     className="absolute inset-0 w-full h-full object-cover opacity-30 z-0"
                 />
 
-                <div className="relative z-10 max-w-7xl mx-auto px-6 pt-12">
+                <div className="relative z-10 md:max-w-7xl mx-auto md:px-6 md:pt-12">
                     <div className="flex items-center gap-4 mb-10">
                         <button
                             onClick={() => navigate(-1)}
-                            className="p-3 rounded-full shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] hover:bg-white transition"
+                            className="md:p-3 p-2 rounded-full shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] hover:bg-white transition"
                         >
-                            <ArrowLeftIcon className="w-6 h-6 text-gray-700" />
+                            <ArrowLeftIcon className="md:w-6 md:h-6 w-5 h-5 text-gray-700" />
                         </button>
-                        <h1 className="text-4xl font-bold break-all">
+                        <h1 className="md:text-4xl text-xl font-bold break-all">
                             {cve.id}
                         </h1>
                     </div>
@@ -110,7 +110,7 @@ const CveDetail = () => {
                         </div>
 
                         <div className="mb-10">
-                            <h2 className="text-2xl font-bold mb-4">Описание</h2>
+                            <h2 className="md:text-2xl text-lg font-bold mb-4">Описание</h2>
                             {cve.descriptions.map((d, i) => (
                                 <p key={i} className="mb-4 text-gray-800">
                                     <strong>{d.lang.toUpperCase()}:</strong> {d.value}
@@ -120,7 +120,7 @@ const CveDetail = () => {
 
                         {(cvssV30 || cvssV2) && (
                             <div className="mb-10">
-                                <h2 className="text-2xl font-bold mb-4">CVSS</h2>
+                                <h2 className="md:text-2xl text-lg font-bold mb-4">CVSS</h2>
                                 <div className="grid md:grid-cols-2 gap-6">
                                     {cvssV30 && (
                                         <div className="p-6 border rounded-xl bg-gray-50">
@@ -142,7 +142,7 @@ const CveDetail = () => {
 
                         {Array.isArray(cve.weaknesses) && cve.weaknesses.length > 0 && (
                             <div className="mt-10">
-                                <h2 className="text-2xl font-bold mb-4">Слабые места (CWE)</h2>
+                                <h2 className="md:text-2xl text-lg font-bold mb-4">Слабые места (CWE)</h2>
                                 <ul className="list-disc pl-6 space-y-2">
                                     {cve.weaknesses.map((w, i) => (
                                         <li key={i}>
@@ -158,7 +158,7 @@ const CveDetail = () => {
                         {Array.isArray(cve.configurations?.nodes) &&
                             cve.configurations.nodes.length > 0 && (
                                 <div className="mt-10">
-                                    <h2 className="text-2xl font-bold mb-4">Затронутые продукты</h2>
+                                    <h2 className="md:text-2xl text-lg font-bold mb-4">Затронутые продукты</h2>
 
                                     <div className="space-y-4">
                                         {cve.configurations.nodes.map((node, i) => (
@@ -187,7 +187,7 @@ const CveDetail = () => {
 
                         {Array.isArray(cve.references) && cve.references.length > 0 && (
                             <div className="mt-10">
-                                <h2 className="text-2xl font-bold mb-4">Ссылки</h2>
+                                <h2 className="md:text-2xl text-lg font-bold mb-4">Ссылки</h2>
                                 <ul className="space-y-3">
                                     {cve.references.map((ref, index) => (
                                         <li key={index} className="text-sm">

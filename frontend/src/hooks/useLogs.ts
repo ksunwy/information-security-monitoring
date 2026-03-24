@@ -1,18 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import api from '../lib/api';
-
-export interface LogEntry {
-  id: number;
-  type: 'scan' | 'user_activity';
-  message: string;
-  timestamp: string; 
-  user?: {
-    id: number;
-    login: string;
-    name: string;
-  } | null;
-}
+import type { LogEntry } from '../types';
 
 const fetchLogs = async (type?: 'scan' | 'user_activity'): Promise<LogEntry[]> => {
   const url = type ? `/logs?type=${type}` : '/logs';

@@ -17,14 +17,14 @@ const AssetNew = () => {
   return (
     <>
       <Header />
-      <section className="relative min-h-screen bg-gray-50 pt-30 pb-30">
+      <section className="relative min-h-screen bg-gray-50 py-20 md:pt-30 md:pb-30">
         <img
           src="/src/assets/bg.jpg"
           alt="фон"
           className="absolute inset-0 w-full h-full object-cover opacity-30 z-0"
         />
 
-        <div className="relative z-10 max-w-3xl mx-auto px-6 pt-12">
+        <div className="relative z-10 md:max-w-3xl mx-auto px-4 md:px-6 pt-0 md:pt-12">
           <div className="flex items-center gap-4 mb-10">
             <button
               onClick={navigateBack}
@@ -32,7 +32,7 @@ const AssetNew = () => {
             >
               <ArrowLeftIcon className="w-6 h-6 text-gray-700" />
             </button>
-            <h1 className="text-4xl font-bold druk text-gray-900">Добавить актив</h1>
+            <h1 className="md:text-4xl text-xl font-bold druk text-gray-900">Добавить актив</h1>
           </div>
 
           {errors.length > 0 && (

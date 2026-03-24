@@ -2,14 +2,9 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import api from '../lib/api';
+import type { FormDataAsset } from '../types';
 
-interface FormData {
-  ip: string;
-  name: string;
-  description: string;
-}
-
-const createAsset = async (data: FormData) => {
+const createAsset = async (data: FormDataAsset) => {
   const res = await api.post('/assets', data);
   return res.data;
 };
@@ -17,7 +12,7 @@ const createAsset = async (data: FormData) => {
 export const useAssetNew = () => {
   const navigate = useNavigate();
 
-  const [form, setForm] = useState<FormData>({
+  const [form, setForm] = useState<FormDataAsset>({
     ip: '',
     name: '',
     description: '',
@@ -85,7 +80,7 @@ export const useAssetNew = () => {
     });
   };
 
-  const handleChange = (field: keyof FormData) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (field: keyof FormDataAsset) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm(prev => ({ ...prev, [field]: e.target.value }));
   };
 

@@ -4,27 +4,7 @@ import { format } from 'date-fns';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import SEO from '../../components/SEO';
-
-interface ReportTypeStat {
-  type: string;
-  count: number;
-}
-
-interface RecentReport {
-  id: string | number;
-  title: string;
-  type: string;
-  status: string;
-  createdAt: string;
-  assetName: string;
-}
-
-interface AnalyticsData {
-  total: number;
-  byType: ReportTypeStat[];
-  recent: RecentReport[];
-}
-
+import type { AnalyticsData, RecentReport, ReportTypeStat } from '../../types';
 
 const COLORS: string[] = ['#3b82f6', '#ef4444', '#f59e0b', '#22c55e'];
 
@@ -49,28 +29,28 @@ const ReportAnalytics = () => {
   return (
     <>
       <Header />
-      <section className="relative min-h-screen bg-gray-50 pb-30 pt-40 px-10">
+      <section className="relative min-h-screen bg-gray-50 py-20 md:pb-30 md:pt-40 px-4 md:px-10">
         <img
           src="/src/assets/bg.jpg"
           alt="фон"
           className="absolute inset-0 w-full h-full object-cover opacity-30 z-0"
         />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6">
-          <h1 className="text-4xl font-bold druk text-gray-900 mb-10">
+        <div className="relative z-10 md:max-w-7xl mx-auto md:px-6">
+          <h1 className="md:text-4xl text-xl font-bold druk text-gray-900 mb-4 md:mb-10">
             Аналитика отчётов
           </h1>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div className="backdrop-blur-lg p-8 rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] text-center">
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8">
+            <div className="backdrop-blur-lg p-4 md:p-8 rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] text-center">
+              <h3 className="md:text-xl text-lg font-semibold text-gray-800 mb-4">
                 Всего отчётов
               </h3>
-              <p className="text-5xl font-bold text-blue-600">{data.total}</p>
+              <p className="md:text-5xl text-2xl font-bold text-blue-600">{data.total}</p>
             </div>
 
-            <div className="backdrop-blur-lg p-8 rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC]">
-              <h3 className="text-xl font-semibold text-gray-800 mb-6 text-center">
+            <div className="backdrop-blur-lg p-4 md:p-8 rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC]">
+              <h3 className="md:text-xl text-lg font-semibold text-gray-800 mb-6 text-center">
                 Распределение по типам
               </h3>
 
@@ -100,8 +80,8 @@ const ReportAnalytics = () => {
               </div>
             </div>
 
-            <div className="backdrop-blur-lg p-8 rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] lg:col-span-2">
-              <h3 className="text-xl font-semibold text-gray-800 mb-6">
+            <div className="backdrop-blur-lg p-4 md:p-8 rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] lg:col-span-2">
+              <h3 className="md:text-xl text-lg font-semibold text-gray-800 mb-6">
                 Последние отчёты
               </h3>
 

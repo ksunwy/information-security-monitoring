@@ -6,20 +6,9 @@ import { useAuth } from '../hooks/useAuth';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import SEO from '../components/SEO';
+import type { AssetStats, VulnDistribution } from '../types';
 
 const COLORS = ['#22c55e', '#eab308', '#f97316', '#ef4444'];
-
-interface VulnDistribution {
-  low: number;
-  medium: number;
-  high: number;
-  critical: number;
-}
-
-interface AssetStats {
-  total: number;
-  withVulns: number;
-}
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -48,45 +37,44 @@ const Dashboard = () => {
     ]
     : [];
 
-
   const totalVulns = pieData.reduce((sum, item) => sum + item.value, 0);
 
   return (
     <>
       <Header />
-      <section className="relative min-h-screen bg-gray-50 pt-40 px-10">
+      <section className="relative min-h-screen bg-gray-50 pb-20 md:pb-40 pt-20 md:pt-40 px-4 md:px-10">
         <img src="/src/assets/bg.jpg" alt="фон" className="absolute top-0 left-0 w-full h-full object-cover z-1 opacity-40" />
-        <div className="relative flex items-center justify-between max-w-440 mx-auto z-10">
+        <div className="relative flex md:flex-row flex-col md:items-center justify-between max-w-none md:max-w-440 md:mx-auto z-10">
           <div className='flex items-center gap-3'>
             <h1 className="text-3xl font-semibold text-(--dark)">Дашборд</h1>
             <p className="mt-1 text-sm text-gray-600">
               {user?.name || user?.login || 'Пользователь'}
             </p>
           </div>
-          <div className="mt-10 flex flex-wrap gap-4 justify-center">
+          <div className="md:mt-10 mt-4 flex flex-wrap gap-3 md:gap-4 md:justify-center">
             <NavLink
               to="/assets/new"
-              className="flex items-center justify-center px-6 py-3 border border-transparent font-medium rounded-md shadow-sm text-[#E3F0F8] bg-[#334E6C] hover:bg-blue-700"
+              className="flex items-center justify-center md:w-fit w-full text-center px-6 py-3 border border-transparent font-medium rounded-md shadow-sm text-[#E3F0F8] bg-[#334E6C] hover:bg-blue-700"
             >
               Добавить актив
             </NavLink>
             <NavLink
               to="/assets"
-              className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-[#E3F0F8] bg-[#334E6C] hover:bg-blue-700"
+              className="inline-flex items-center md:w-fit w-full text-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-[#E3F0F8] bg-[#334E6C] hover:bg-blue-700"
             >
               Перейти к активам
             </NavLink>
             <NavLink
               to="/analytics/reports"
-              className="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-[#E3F0F8] hover:bg-gray-50"
+              className="inline-flex items-center md:w-fit w-full text-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-blue-100 hover:bg-gray-50"
             >
               Скачать отчёты
             </NavLink>
           </div>
         </div>
 
-        <main className="relative max-w-440 mx-auto pt-8 z-10">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <main className="relative max-w-none md:max-w-440 mx-auto pt-4 md:pt-8 z-10">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6 mb-8">
             <div className="w-full bg-(--white) text-(--dark) rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC]">
               <div className="p-5">
                 <dl>
@@ -128,7 +116,7 @@ const Dashboard = () => {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div className="w-full bg-(--white) text-(--dark) rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] p-6">
+            <div className="w-full bg-(--white) text-(--dark) rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] p-4 md:p-6">
               <h3 className="text-lg font-medium mb-4">Распределение уязвимостей по критичности</h3>
               {distLoading ? (
                 <div className="h-64 flex items-center justify-center">Загрузка...</div>
@@ -158,10 +146,10 @@ const Dashboard = () => {
                   </PieChart>
                 </ResponsiveContainer>
               )}
-              <NavLink className={"pt-2 opacity-80 transition-all duration-300 hover:text-[#334E6C]"} to={"/analytics/vulnerabilities"}>Аналитика уязвимостей</NavLink>
+              <NavLink style={{textDecoration: "underline"}} className={"pt-2 opacity-80 transition-all duration-300 hover:text-[#334E6C]"} to={"/analytics/vulnerabilities"}>Аналитика уязвимостей</NavLink>
             </div>
 
-            <div className="w-full bg-(--white) text-(--dark) rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] p-6">
+            <div className="w-full bg-(--white) text-(--dark) rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] p-4 md:p-6">
               <h3 className="text-lg font-medium text-gray-900 mb-4 flex items-center justify-between">
                 <span>Динамика уязвимостей</span>
                 <span className="text-sm text-gray-500">за последние 6 месяцев</span>

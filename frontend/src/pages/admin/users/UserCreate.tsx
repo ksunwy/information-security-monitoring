@@ -17,22 +17,22 @@ const UserCreate = () => {
   return (
     <>
       <Header />
-      <section className="relative min-h-screen bg-gray-50 pb-30 pt-40 px-10">
+      <section className="relative min-h-screen bg-gray-50 py-20 md:pb-30 md:pt-40 px-4 md:px-10">
         <img
           src="/src/assets/bg.jpg"
           alt="фон"
           className="absolute inset-0 w-full h-full object-cover opacity-30 z-0"
         />
 
-        <div className="relative z-10 max-w-3xl mx-auto px-6 pt-12">
-          <div className="flex items-center gap-4 mb-10">
+        <div className="relative z-10 md:max-w-3xl mx-auto md:px-6 md:pt-12">
+          <div className="flex items-center gap-4 mb-4 md:mb-10">
             <button
               onClick={navigateBack}
               className="p-3 rounded-full bg-white/80 hover:bg-white transition"
             >
               <ArrowLeftIcon className="w-6 h-6 text-gray-700" />
             </button>
-            <h1 className="text-4xl font-bold druk text-gray-900">Добавить пользователя</h1>
+            <h1 className="md:text-4xl text-xl font-bold druk text-gray-900">Добавить пользователя</h1>
           </div>
 
           {errors.length > 0 && (
@@ -57,7 +57,7 @@ const UserCreate = () => {
                     value={form.email}
                     onChange={handleChange('email')}
                     placeholder="user@example.com"
-                    className="w-full px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white/70"
+                    className="w-full px-5 py-3 border border-gray-300 md:text-base text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white/70"
                     required
                   />
                 </div>
@@ -71,7 +71,7 @@ const UserCreate = () => {
                     value={form.login}
                     onChange={handleChange('login')}
                     placeholder="ivanov123"
-                    className="w-full px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white/70"
+                    className="w-full px-5 py-3 border border-gray-300 md:text-base text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white/70"
                     required
                   />
                 </div>
@@ -85,7 +85,7 @@ const UserCreate = () => {
                     value={form.name}
                     onChange={handleChange('name')}
                     placeholder="Иван Иванов"
-                    className="w-full px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white/70"
+                    className="w-full px-5 py-3 border border-gray-300 md:text-base text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white/70"
                     required
                   />
                 </div>
@@ -99,7 +99,7 @@ const UserCreate = () => {
                     value={form.password}
                     onChange={handleChange('password')}
                     placeholder="Минимум 6 символов"
-                    className="w-full px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white/70"
+                    className="w-full px-5 py-3 border border-gray-300 md:text-base text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white/70"
                     required
                   />
                 </div>
@@ -110,7 +110,7 @@ const UserCreate = () => {
                 <select
                   value={form.role}
                   onChange={handleChange('role')}
-                  className="w-full px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white/70"
+                  className="w-full px-5 py-3 border border-gray-300 md:text-base text-sm  rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white/70"
                 >
                   <option value="observer">Observer</option>
                   <option value="manager">Manager</option>
@@ -123,14 +123,14 @@ const UserCreate = () => {
               <button
                 type="button"
                 onClick={navigateBack}
-                className="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition"
+                className="md:px-6 px-4 md:py-3 py-2.5 border md:text-base text-sm border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition"
               >
                 Отмена
               </button>
               <button
                 type="submit"
                 disabled={isPending}
-                className="px-8 py-3 bg-[#334E6C] text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition shadow-lg"
+                className="md:px-8 px-4 md:py-3 py-2.5 bg-[#334E6C] md:text-base text-sm text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition shadow-lg"
               >
                 {isPending ? 'Создаётся...' : 'Добавить пользователя'}
               </button>

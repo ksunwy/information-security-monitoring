@@ -1,17 +1,7 @@
 import { create } from 'zustand';
 import { useMutation } from '@tanstack/react-query';
-import { getMe, login, register, type AuthResponse, } from '../api/authApi';
-
-interface AuthState {
-  user: AuthResponse['user'] | null;
-  token: string | null;
-  isAuthenticated: boolean;
-
-  login: (credentials: { login: string; password: string }) => Promise<void>;
-  register: (data: { email: string; login: string; name: string; password: string }) => Promise<void>;
-  fetchMe: () => Promise<void>;
-  logout: () => void;
-}
+import { getMe, login, register } from '../api/authApi';
+import type { AuthState } from '../types';
 
 export const useAuthStore = create<AuthState>((set) => ({
   user: JSON.parse(localStorage.getItem('user') || 'null'),

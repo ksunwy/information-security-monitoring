@@ -1,56 +1,25 @@
 import { useQuery } from '@tanstack/react-query';
 import api from '../lib/api';
-import { fetchAssets, type Asset } from './useAssets';
-
-interface VulnDistribution {
-  low: number;
-  medium: number;
-  high: number;
-  critical: number;
-}
-
-interface AssetStats {
-  total: number;
-  withVulns: number;
-}
-
-interface VulnDynamicsEntry {
-  period: string;
-  new: number;
-  fixed: number;
-}
-
-interface VulnDynamics {
-  data: VulnDynamicsEntry[];
-  granularity: string;
-}
-
-interface RecentVulnerability {
-  id: number;
-  cveId?: string;
-  description?: string;
-  criticality: 'low' | 'medium' | 'high' | 'critical';
-  detectedAt: string;
-  cvssScore: string
-}
+import { fetchAssets } from './useAssets';
+import type { AdminAssetStats, AdminRecentVulnerability, AdminVulnDistribution, AdminVulnDynamics, Asset } from '../types';
 
 export const useAdminDashboard = () => {
-  const distribution = useQuery<VulnDistribution>({
+  const distribution = useQuery<AdminVulnDistribution>({
     queryKey: ['vuln-distribution'],
     queryFn: () => api.get('/dashboards/vuln-distribution').then(res => res.data),
   });
 
-  const stats = useQuery<AssetStats>({
+  const stats = useQuery<AdminAssetStats>({
     queryKey: ['asset-stats'],
     queryFn: () => api.get('/dashboards/asset-stats').then(res => res.data),
   });
 
-  const dynamics = useQuery<VulnDynamics>({
+  const dynamics = useQuery<AdminVulnDynamics>({
     queryKey: ['vuln-dynamics'],
     queryFn: () => api.get('/dashboards/vuln-dynamics').then(res => res.data),
   });
 
-  const recentVulns = useQuery<RecentVulnerability[]>({
+  const recentVulns = useQuery<AdminRecentVulnerability[]>({
     queryKey: ['recent-vulns'],
     queryFn: () => api.get('/vulnerabilities?limit=5&orderBy=detectedAt:desc').then(res => res.data),
   });

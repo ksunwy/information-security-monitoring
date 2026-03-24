@@ -5,6 +5,7 @@ import { useAssetDetail } from '../../hooks/useAssetDetail';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import SEO from '../../components/SEO';
+import type { Scan, Vulnerability } from '../../types';
 
 const AssetDetail = () => {
   const {
@@ -47,15 +48,15 @@ const AssetDetail = () => {
   return (
     <>
       <Header />
-      <section className="relative min-h-screen bg-gray-50 pt-30 pb-30">
+      <section className="relative min-h-screen bg-gray-50 py-20 md:pt-30 md:pb-30">
         <img
           src="/src/assets/bg.jpg"
           alt="фон"
           className="absolute inset-0 w-full h-full object-cover opacity-30 z-0"
         />
 
-        <div className="relative z-10 max-w-5xl mx-auto px-6 pt-12">
-          <div className="flex items-center justify-between mb-10">
+        <div className="relative z-10 md:max-w-5xl mx-auto px-4 md:px-6 pt-0 md:pt-12">
+          <div className="flex md:flex-row flex-col md:items-center md:justify-between md:gap-0 gap-4 mb-4 md:mb-10">
             <div className="flex items-center gap-4">
               <button
                 onClick={() => navigate(-1)}
@@ -70,29 +71,29 @@ const AssetDetail = () => {
                     onChange={(e) =>
                       setEditForm((prev) => ({ ...prev, name: e.target.value }))
                     }
-                    className="text-4xl font-bold druk text-gray-900 bg-white border rounded px-3 py-1"
+                    className="md:text-4xl text-xl font-bold druk text-gray-900 bg-white border rounded px-3 py-1"
                   />
                 ) : (
-                  <h1 className="text-4xl font-bold druk text-gray-900">{asset.name}</h1>
+                  <h1 className="md:text-4xl text-xl font-bold druk text-gray-900">{asset.name}</h1>
                 )}
-                <p className="text-lg text-gray-600 mt-1">{asset.ip}</p>
+                <p className="text-base md:text-lg text-gray-600 mt-1">{asset.ip}</p>
               </div>
             </div>
 
             <button
               onClick={() => scanMutation.mutate()}
               disabled={scanMutation.isPending}
-              className="flex items-center gap-2 px-6 py-3 bg-[#334E6C] text-white rounded-xl hover:bg-blue-700 disabled:opacity-50 transition shadow-lg"
+              className="flex items-center justify-center gap-2 px-6 py-3 bg-[#334E6C] text-white rounded-xl hover:bg-blue-700 disabled:opacity-50 transition shadow-lg"
             >
-              <span className='flex items-center gap-2'>
+              <span className='flex items-center justify-center gap-2'>
                 <PlayIcon className="w-5 h-5" />
                 {scanMutation.isPending ? 'Сканируется...' : 'Сканировать сейчас'}
               </span>
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-            <div className="bg-white/90 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-gray-200">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-4 md:mb-10">
+            <div className="bg-white/90 backdrop-blur-lg rounded-xl md:rounded-2xl p-4 md:p-6 shadow-lg border border-gray-200">
               <h3 className="text-lg font-semibold text-gray-800 mb-3">Статус</h3>
               <span
                 className={`inline-block px-4 py-2 text-sm font-medium rounded-full ${asset.status === 'Онлайн' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
@@ -102,7 +103,7 @@ const AssetDetail = () => {
               </span>
             </div>
 
-            <div className="bg-white/90 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-gray-200">
+            <div className="bg-white/90 backdrop-blur-lg rounded-xl md:rounded-2xl p-4 md:p-6 shadow-lg border border-gray-200">
               <h3 className="text-lg font-semibold text-gray-800 mb-3">Критичность</h3>
               <span
                 className={`inline-block px-4 py-2 text-sm font-medium rounded-full ${maxCriticality === 'critical'
@@ -118,14 +119,14 @@ const AssetDetail = () => {
               </span>
             </div>
 
-            <div className="bg-white/90 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-gray-200">
+            <div className="bg-white/90 backdrop-blur-lg rounded-xl md:rounded-2xl p-4 md:p-6 shadow-lg border border-gray-200">
               <h3 className="text-lg font-semibold text-gray-800 mb-3">Последний скан</h3>
               <p className="text-gray-700">{format(new Date(asset.updatedAt!), 'dd.MM.yyyy') || 'Никогда'}</p>
             </div>
           </div>
 
           {(asset.description || isEditing) && (
-            <div className="bg-white/90 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-gray-200 mb-10">
+            <div className="bg-white/90 backdrop-blur-lg rounded-xl md:rounded-2xl p-4 md:p-6 shadow-lg border border-gray-200 mb-10">
               <h3 className="text-lg font-semibold text-gray-800 mb-3">Описание</h3>
 
               {isEditing ? (
@@ -145,16 +146,16 @@ const AssetDetail = () => {
             </div>
           )}
 
-          <div className="flex items-center gap-6 mb-10">
-            <button onClick={() => getReportPDF(asset.id)} className="bg-white/90 hover:text-white hover:bg-blue-700 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-gray-200 w-full">Скачать PDF-отчет</button>
-            <button onClick={() => getReportCSV(asset.id)} className="bg-white/90 hover:text-white hover:bg-blue-700 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-gray-200 w-full">Скачать CSV-отчет</button>
+          <div className="flex md:flex-row flex-col items-center gap-4 md:gap-6 mb-4 md:mb-10">
+            <button onClick={() => getReportPDF(asset.id)} className="bg-white/90 hover:text-white hover:bg-blue-700 backdrop-blur-lg rounded-xl md:rounded-2xl p-4 md:p-6 shadow-lg border border-gray-200 w-full">Скачать PDF-отчет</button>
+            <button onClick={() => getReportCSV(asset.id)} className="bg-white/90 hover:text-white hover:bg-blue-700 backdrop-blur-lg rrounded-xl md:rounded-2xl p-4 md:p-6 shadow-lg border border-gray-200 w-full">Скачать CSV-отчет</button>
           </div>
 
-          <div className="bg-white/90 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-gray-200 mb-10">
+          <div className="bg-white/90 backdrop-blur-lg rounded-xl md:rounded-2xl p-4 md:p-6 shadow-lg border border-gray-200 mb-10">
             <h3 className="text-xl font-bold text-gray-900 mb-4">Сканы</h3>
             {asset.scans?.length ? (
               <div className="space-y-4">
-                {asset.scans.map((scan, idx) => (
+                {asset.scans.map((scan: Scan, idx: number) => (
                   <div key={idx} className="p-4 bg-gray-50 rounded-lg">
                     <div className="flex justify-between items-center">
                       <span className="text-sm font-medium text-gray-700">
@@ -172,11 +173,11 @@ const AssetDetail = () => {
             )}
           </div>
 
-          <div className="bg-white/90 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-gray-200 max-h-150 overflow-y-auto">
+          <div className="bg-white/90 backdrop-blur-lg rounded-xl md:rounded-2xl p-4 md:p-6 shadow-lg border border-gray-200 max-h-150 overflow-y-auto">
             <h3 className="text-xl font-bold text-gray-900 mb-4">Уязвимости</h3>
             {asset.vulnerabilities?.length ? (
               <div className="space-y-4">
-                {asset.vulnerabilities.map((vuln, idx) => (
+                {asset.vulnerabilities.map((vuln: Vulnerability, idx: number) => (
                   <div
                     key={idx}
                     className={`p-4 rounded-lg ${vuln.criticality === 'critical'
@@ -211,7 +212,7 @@ const AssetDetail = () => {
               <p className="text-gray-500">Уязвимостей пока нет</p>
             )}
           </div>
-          <div className="mt-12 flex items-center gap-3 justify-end">
+          <div className="md:mt-12 mt-6 flex items-center gap-3 justify-end">
             <button
               onClick={() => setIsEditing(!isEditing)}
               className="px-6 py-3 bg-gray-200 rounded-lg hover:bg-gray-300 transition"

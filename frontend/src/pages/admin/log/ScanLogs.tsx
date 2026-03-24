@@ -24,20 +24,20 @@ const ScanLogs = () => {
   return (
     <>
       <Header />
-      <section className="relative min-h-screen bg-gray-50 pb-30 pt-40 px-10">
+      <section className="relative min-h-screen bg-gray-50 py-20 md:pb-30 md:pt-40 px-4 md:px-10">
         <img
           src="/src/assets/bg.jpg"
           alt="фон"
           className="absolute inset-0 w-full h-full object-cover opacity-30 z-0"
         />
 
-        <div className="relative z-10 max-w-440 mx-auto px-6">
-          <div className="flex justify-between items-center mb-10">
-            <h1 className="text-4xl font-bold druk text-gray-900">Логи сканирований</h1>
+        <div className="relative z-10 md:max-w-440 mx-auto md:px-6">
+          <div className="flex md:flex-row flex-col md:justify-between md:items-center mb-4 md:mb-10">
+            <h1 className="md:text-4xl text-xl font-bold druk text-gray-900">Логи сканирований</h1>
             <NavLink className={"opacity-80 transition-all duration-300 hover:text-[#334E6C]"} style={{ textDecoration: "underline" }} to={"/admin/logs/system"}>Посмотреть все логи</NavLink>
           </div>
 
-          <div className="flex flex-wrap gap-6 items-center mb-10">
+          <div className="flex flex-wrap gap-6 items-center mb-4 md:mb-10">
             <div className="flex-1 min-w-75 relative">
               <MagnifyingGlassIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
@@ -45,7 +45,7 @@ const ScanLogs = () => {
                 placeholder="Поиск по сообщению, имени пользователя..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 "
+                className="w-full pl-12 pr-4 py-3 border border-gray-400 rounded-lg md:text-base text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 "
               />
             </div>
           </div>

@@ -30,14 +30,14 @@ const CveList = () => {
   return (
     <>
       <Header />
-      <section className="relative min-h-screen bg-gray-50 pb-30 pt-40 px-10">
+      <section className="relative min-h-screen bg-gray-50 md:pb-30 py-20 md:pt-40 px-4 md:px-10">
         <img
           src="/src/assets/bg.jpg"
           alt="фон"
           className="absolute inset-0 w-full h-full object-cover opacity-30 z-0"
         />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6">
+        <div className="relative z-10 md:max-w-7xl mx-auto md:px-6">
           <h1 className="text-4xl font-bold druk text-gray-900 mb-10">Поиск CVE</h1>
 
           <form onSubmit={handleSearch} className="mb-10">
@@ -54,7 +54,7 @@ const CveList = () => {
               </div>
               <button
                 type="submit"
-                className="px-6 py-3 bg-[#334E6C] text-white rounded-lg hover:bg-blue-700 transition shadow-md"
+                className="px-6 py-3 bg-[#334E6C] text-white rounded-lg hover:bg-blue-700 transition shadow-md md:w-fit w-full"
               >
                 Искать
               </button>

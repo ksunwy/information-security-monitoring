@@ -13,14 +13,14 @@ const TrendsAnalytics = () => {
   return (
     <>
       <Header />
-      <section className="relative min-h-screen bg-gray-50 pb-30 pt-40 px-10">
+      <section className="relative min-h-screen bg-gray-50 py-20 md:pb-30 md:pt-40 px-4 md:px-10">
         <img src="/src/assets/bg.jpg" alt="фон" className="absolute inset-0 w-full h-full object-cover opacity-30 z-0" />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6">
-          <h1 className="text-4xl font-bold druk text-gray-900 mb-10">Тренды информационной безопасности</h1>
+        <div className="relative z-10 md:max-w-7xl mx-auto md:px-6">
+          <h1 className="md:text-4xl text-xl font-bold druk text-gray-900 mb-4 md:mb-10">Тренды информационной безопасности</h1>
 
-          <div className="rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] backdrop-blur-lg p-8 border border-gray-200">
-            <p className="text-gray-600 mb-6">
+          <div className="rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] backdrop-blur-lg p-4 md:p-8 border border-gray-200">
+            <p className="text-gray-600 mb-4 md:mb-6">
               Последние трендовые уязвимости из NVD
             </p>
 

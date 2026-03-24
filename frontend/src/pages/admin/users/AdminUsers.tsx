@@ -48,28 +48,28 @@ const AdminUsers = () => {
   return (
     <>
       <Header />
-      <section className="relative min-h-screen bg-gray-50 pb-30 pt-40 px-10">
+      <section className="relative min-h-screen bg-gray-50 py-20 md:pb-30 md:pt-40 px-4 md:px-10">
         <img
           src="/src/assets/bg.jpg"
           alt="фон"
           className="absolute inset-0 w-full h-full object-cover opacity-30 z-0"
         />
 
-        <div className="relative z-10 max-w-440 mx-auto px-6">
-          <div className="flex justify-between items-center mb-10">
-            <h1 className="text-4xl font-bold druk text-gray-900">Пользователи</h1>
+        <div className="relative z-10 md:max-w-440 mx-auto md:px-6">
+          <div className="flex md:flex-row flex-col md:gap-0 gap-2 md:justify-between md:items-center mb-4 md:mb-10">
+            <h1 className="md:text-4xl text-xl font-bold druk text-gray-900">Пользователи</h1>
             <NavLink
               to="/admin/users/new"
-              className="px-6 py-3 bg-[#334E6C] text-white rounded-xl hover:bg-blue-700 transition shadow-lg"
+              className="px-6 md:py-3 py-2 bg-[#334E6C] text-white rounded-lg md:rounded-xl hover:bg-blue-700 transition shadow-lg"
             >
-              <span className="flex items-center gap-2">
+              <span className="flex items-center justify-center gap-2 md:text-base text-sm">
                 <PlusIcon className="w-5 h-5" />
                 Добавить пользователя
               </span>
             </NavLink>
           </div>
 
-          <div className="flex flex-wrap gap-6 items-center mb-10">
+          <div className="flex flex-wrap gap-2 md:gap-6 items-center mb-4 md:mb-10">
             <div className="flex-1 min-w-75 relative">
               <MagnifyingGlassIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
@@ -77,14 +77,14 @@ const AdminUsers = () => {
                 placeholder="Поиск по имени, email, логину..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 "
+                className="w-full pl-12 md:pr-4 pr-3 md:py-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 "
               />
             </div>
 
             <select
               value={roleFilter}
               onChange={(e) => setRoleFilter(e.target.value)}
-              className="px-4 py-3 border border-gray-400 rounded-lg h-12.5 focus:outline-none focus:ring-2 focus:ring-blue-500 min-w-45"
+              className="md:px-4 px-3 md:py-3 py-2 border text-sm md:text-base border-gray-400 rounded-lg h-12.5 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full md:min-w-45"
             >
               <option value="">Все роли</option>
               <option value="admin">Администратор</option>
@@ -92,20 +92,20 @@ const AdminUsers = () => {
             </select>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-            <div className="bg-(--white) text-(--dark) rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] backdrop-blur-lg p-6 border border-gray-200 text-center">
-              <h3 className="text-lg font-semibold text-gray-800">Всего пользователей</h3>
-              <p className="text-4xl font-bold text-blue-600 mt-2">{users.length}</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-6 mb-4 md:mb-10">
+            <div className="bg-(--white) text-(--dark) rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] backdrop-blur-lg p-4 md:p-6 border border-gray-200 text-center">
+              <h3 className="md:text-lg text-base font-semibold text-gray-800">Всего пользователей</h3>
+              <p className="md:text-4xl text-xl font-bold text-blue-600 mt-2">{users.length}</p>
             </div>
-            <div className="bg-(--white) text-(--dark) rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] p-6 border border-gray-200 text-center">
-              <h3 className="text-lg font-semibold text-gray-800">Администраторы</h3>
-              <p className="text-4xl font-bold text-green-600 mt-2">
+            <div className="bg-(--white) text-(--dark) rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] p-4 md:p-6 border border-gray-200 text-center">
+              <h3 className="md:text-lg text-base font-semibold text-gray-800">Администраторы</h3>
+              <p className="md:text-4xl text-xl font-bold text-green-600 mt-2">
                 {users.filter(u => u.role === 'admin').length}
               </p>
             </div>
-            <div className="bg-(--white) text-(--dark) rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] p-6 border border-gray-200 text-center">
-              <h3 className="text-lg font-semibold text-gray-800">Пользователи</h3>
-              <p className="text-4xl font-bold text-yellow-600 mt-2">
+            <div className="bg-(--white) text-(--dark) rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] p-4 md:p-6 border border-gray-200 text-center">
+              <h3 className="md:text-lg text-base font-semibold text-gray-800">Пользователи</h3>
+              <p className="md:text-4xl text-xl font-bold text-yellow-600 mt-2">
                 {users.filter(u => u.role === 'observer').length}
               </p>
             </div>

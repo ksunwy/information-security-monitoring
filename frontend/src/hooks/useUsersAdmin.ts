@@ -1,22 +1,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '../lib/api';
-
-export interface User {
-  id: number;
-  email: string;
-  login: string;
-  name: string;
-  role: 'admin' | 'observer' | 'manager';
-  createdAt: string;
-}
-
-interface FetchUsersParams {
-  sortBy?: string;
-  sortOrder?: 'ASC' | 'DESC';
-  search?: string;
-  role?: string;
-}
+import type { FetchUsersParams, User } from '../types';
 
 const fetchUsers = async (params: FetchUsersParams = {}): Promise<User[]> => {
   const queryParams = new URLSearchParams();

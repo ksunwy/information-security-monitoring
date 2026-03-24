@@ -1,57 +1,11 @@
 import { useVulnAnalytics } from '../../hooks/useAnalytics';
-import {
-    PieChart,
-    Pie,
-    Cell,
-    Tooltip,
-    ResponsiveContainer,
-    BarChart,
-    Bar,
-    XAxis,
-    YAxis,
-    CartesianGrid,
-} from 'recharts';
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, } from 'recharts';
 import type { PieLabelRenderProps } from 'recharts';
 import { format } from 'date-fns';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import SEO from '../../components/SEO';
-
-interface SeverityStat {
-    severity: string;
-    count: number;
-}
-
-interface TopCveStat {
-    cveId: string | null;
-    count: number;
-}
-
-interface RecentVuln {
-    id: string | number;
-    cveId: string | null;
-    detectedAt: string;
-    description: string | null;
-}
-
-interface VulnAnalyticsData {
-    total: number;
-    bySeverity: SeverityStat[];
-    topCve: TopCveStat[];
-    recent: RecentVuln[];
-}
-
-interface PieItem {
-    name: string;
-    value: number;
-    [key: string]: string | number;
-}
-
-interface BarItem {
-    cve: string;
-    count: number;
-}
-
+import type { BarItem, PieItem, RecentVuln, SeverityStat, TopCveStat, VulnAnalyticsData } from '../../types';
 
 const COLORS: string[] = ['#ef4444', '#f59e0b', '#eab308', '#22c55e', '#6b7280'];
 
@@ -93,28 +47,28 @@ const VulnAnalytics = () => {
     return (
         <>
             <Header />
-            <section className="relative min-h-screen bg-gray-50 pb-30 pt-40 px-10">
+            <section className="relative min-h-screen bg-gray-50 py-20 md:pb-30 md:pt-40 px-4 md:px-10">
                 <img
                     src="/src/assets/bg.jpg"
                     alt="фон"
                     className="absolute inset-0 w-full h-full object-cover opacity-30 z-0"
                 />
 
-                <div className="relative z-10 max-w-7xl mx-auto px-6">
-                    <h1 className="text-4xl font-bold druk text-gray-900 mb-10">
+                <div className="relative z-10 md:max-w-7xl mx-auto md:px-6">
+                    <h1 className="md:text-4xl text-xl font-bold druk text-gray-900 mb-10">
                         Аналитика уязвимостей
                     </h1>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        <div className="backdrop-blur-lg rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] p-8 text-center">
-                            <h3 className="text-xl font-semibold text-gray-800 mb-4">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 md:gap-8">
+                        <div className="backdrop-blur-lg rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] p-4 md:p-8 text-center">
+                            <h3 className="md:text-xl text-lg font-semibold text-gray-800 mb-4">
                                 Всего уязвимостей
                             </h3>
                             <p className="text-5xl font-bold text-blue-600">{data.total}</p>
                         </div>
 
-                        <div className="backdrop-blur-lg rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] p-8">
-                            <h3 className="text-xl font-semibold text-gray-800 mb-6 text-center">
+                        <div className="backdrop-blur-lg rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] p-4 md:p-8">
+                            <h3 className="md:text-xl text-lg font-semibold text-gray-800 mb-4 md:mb-6 text-center">
                                 Распределение по критичности
                             </h3>
 

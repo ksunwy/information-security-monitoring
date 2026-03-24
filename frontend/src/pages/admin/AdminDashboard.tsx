@@ -43,56 +43,56 @@ const AdminDashboard = () => {
     return (
         <>
             <Header />
-            <section className="relative min-h-screen bg-gray-50 pb-30 pt-30 px-10">
+            <section className="relative min-h-screen bg-gray-50 py-20 md:pb-30 md:pt-30 px-4 md:px-10">
                 <img
                     src="/src/assets/bg.jpg"
                     alt="фон"
                     className="absolute inset-0 w-full h-full object-cover opacity-30 z-0"
                 />
 
-                <div className="relative z-10 max-w-7xl mx-auto px-6 pt-12">
+                <div className="relative z-10 md:max-w-7xl mx-auto md:px-6 md:pt-12">
 
-                    <div className="flex justify-between items-center mb-12">
+                    <div className="flex justify-between items-center mb-4 md:mb-12">
                         <div>
-                            <h1 className="text-4xl font-bold druk text-gray-900">Дашборд</h1>
-                            <p className="text-lg text-gray-600 mt-2">Обзор состояния безопасности</p>
+                            <h1 className="md:text-4xl text-xl font-bold druk text-gray-900">Дашборд</h1>
+                            <p className="md:text-lg text-base text-gray-600 mt-2">Обзор состояния безопасности</p>
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
-                        <div className="backdrop-blur-lg bg-(--white) text-(--dark) rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] p-6 border border-gray-200">
-                            <h3 className="text-lg font-semibold text-gray-800">Активы в системе</h3>
-                            <p className="text-5xl font-bold text-[#334e6c] mt-3">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6 mb-4 md:mb-12">
+                        <div className="backdrop-blur-lg bg-(--white) text-(--dark) rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] p-4 md:p-6 border border-gray-200">
+                            <h3 className="md:text-lg text-base font-semibold text-gray-800">Активы в системе</h3>
+                            <p className="md:text-5xl text-xl font-bold text-[#334e6c] mt-3">
                                 {isStatsLoading ? '...' : stats?.total ?? 0}
                             </p>
                         </div>
 
-                        <div className="backdrop-blur-lg bg-(--white) text-(--dark) rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] p-6 border border-gray-200">
-                            <h3 className="text-lg font-semibold text-gray-800">Обнаружено</h3>
-                            <p className="text-5xl font-bold text-[#334e6c] mt-3">
+                        <div className="backdrop-blur-lg bg-(--white) text-(--dark) rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] p-4 md:p-6 border border-gray-200">
+                            <h3 className="md:text-lg text-base font-semibold text-gray-800">Обнаружено</h3>
+                            <p className="md:text-5xl text-xl font-bold text-[#334e6c] mt-3">
                                 {isDistLoading ? '...' : totalVulns}
                             </p>
                         </div>
 
-                        <div className="backdrop-blur-lg bg-(--white) text-(--dark) rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] p-6 border border-gray-200">
-                            <h3 className="text-lg font-semibold text-gray-800">Критические риски</h3>
-                            <p className="text-5xl font-bold text-[#334e6c] mt-3">
+                        <div className="backdrop-blur-lg bg-(--white) text-(--dark) rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] p-4 md:p-6 border border-gray-200">
+                            <h3 className="md:text-lg text-base font-semibold text-gray-800">Критические риски</h3>
+                            <p className="md:text-5xl text-xl font-bold text-[#334e6c] mt-3">
                                 {isDistLoading ? '...' : criticalCount}
                             </p>
                         </div>
 
-                        <div className="backdrop-blur-lg bg-(--white) text-(--dark) rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] p-6 border border-gray-200">
-                            <h3 className="text-lg font-semibold text-gray-800">Активные сканирования</h3>
-                            <p className="text-5xl font-bold text-[#334e6c] mt-3">4</p>
+                        <div className="backdrop-blur-lg bg-(--white) text-(--dark) rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] p-4 md:p-6 border border-gray-200">
+                            <h3 className="md:text-lg text-base font-semibold text-gray-800">Активные сканирования</h3>
+                            <p className="md:text-5xl text-xl font-bold text-[#334e6c] mt-3">4</p>
                         </div>
                     </div>
 
-                    <div className=" backdrop-blur-lg p-8 bg-(--white) text-(--dark) rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] border border-gray-200 mb-12">
-                        <div className="flex justify-between items-center mb-6">
+                    <div className=" backdrop-blur-lg p-4 md:p-8 bg-(--white) text-(--dark) rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] border border-gray-200 mb-4 md:mb-12">
+                        <div className="flex md:flex-row flex-col gap-2 md:justify-between md:items-center mb-4 md:mb-6">
                             <h3 className="text-xl font-bold text-[#334e6c]">Обзор безопасности</h3>
-                            <select className="px-4 py-3 border border-gray-400 rounded-lg h-12.5 focus:outline-none focus:ring-2 focus:ring-blue-500 min-w-45">
-                                <option>Неделя</option>
-                                <option>Месяц</option>
+                            <select className="md:px-4 px-3 md:py-3 py-2 md:text-base text-sm border border-gray-400 rounded-lg h-10 md:h-12.5 focus:outline-none focus:ring-2 focus:ring-blue-500 min-w-45">
+                                <option className='md:text-base text-sm'>Неделя</option>
+                                <option className='md:text-base text-sm'>Месяц</option>
                             </select>
                         </div>
 
@@ -149,9 +149,9 @@ const AdminDashboard = () => {
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        <div className="backdrop-blur-lg rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] p-8 border border-gray-200">
-                            <h3 className="text-xl font-bold text-gray-900 mb-6">Активы</h3>
-                            <div className="space-y-4">
+                        <div className="backdrop-blur-lg rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] p-4 md:p-8 border border-gray-200">
+                            <h3 className="text-xl font-bold text-gray-900 mb-4 md:mb-6">Активы</h3>
+                            <div className="space-y-4 max-h-125 overflow-y-auto">
                                 {isAssetsLoading ? (
                                     <div className="text-gray-500">Загрузка...</div>
                                 ) : assets.length === 0 ? (
@@ -193,9 +193,9 @@ const AdminDashboard = () => {
                             </div>
                         </div>
 
-                        <div className="bg-(--white) text-(--dark) rounded-[10px] backdrop-blur-lg shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] p-8 border border-gray-200">
+                        <div className="bg-(--white) text-(--dark) rounded-[10px] backdrop-blur-lg shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] p-4 md:p-8 border border-gray-200">
                             <h3 className="text-xl font-bold text-gray-900 mb-6">Последние инциденты</h3>
-                            <div className="space-y-4">
+                            <div className="space-y-4 max-h-125 overflow-y-auto">
                                 {isRecentLoading ? (
                                     <div className="text-gray-500">Загрузка...</div>
                                 ) : recentVulns?.length ? (

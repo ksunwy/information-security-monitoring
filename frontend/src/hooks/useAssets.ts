@@ -1,38 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '../lib/api';
-
-export interface Vulnerability {
-  cveId?: string;
-  description?: string;
-  cvssScore?: number;
-  criticality: 'low' | 'medium' | 'high' | 'critical';
-  fixed: boolean;
-  detectedAt?: string;
-}
-
-export interface Scan {
-  id: number;
-  scannedAt?: string;     
-  status?: string;       
-  createdAt: string;    
-}
-
-export interface Asset {
-  id: number;
-  ip: string;
-  name: string;
-  description?: string;           
-  group: string;                
-  owner: string;                
-  criticality: 'low' | 'medium' | 'high' | 'critical';  
-  status: 'Онлайн' | 'Оффлайн';                      
-  lastScan: string;              
-  updatedAt: string;              
-  createdAt: string;            
-  vulnerabilities: Vulnerability[];  
-  scans: Scan[];              
-}
+import type { Asset, Vulnerability } from '../types';
 
 export const fetchAssets = async (): Promise<Asset[]> => {
   const res = await api.get('/assets');

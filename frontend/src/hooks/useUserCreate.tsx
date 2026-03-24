@@ -2,14 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import api from '../lib/api';
-
-interface FormData {
-  email: string;
-  login: string;
-  name: string;
-  password: string;
-  role: 'admin' | 'observer' | 'manager';
-}
+import type { FormData } from '../types';
 
 const createUser = async (data: FormData) => {
   const res = await api.post('/users', data);

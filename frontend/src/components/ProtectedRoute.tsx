@@ -1,12 +1,7 @@
 
 import { Navigate } from 'react-router-dom';
 import { useAuthStore } from '../hooks/useAuth';
-import type { JSX } from 'react';
-
-interface ProtectedRouteProps {
-  children: JSX.Element;
-  roles?: string[];
-}
+import type { ProtectedRouteProps } from '../types';
 
 export function ProtectedRoute({ children, roles }: ProtectedRouteProps) {
   const { isAuthenticated, user } = useAuthStore();
