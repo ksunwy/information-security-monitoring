@@ -57,7 +57,7 @@ export default function Login() {
                                     type="text"
                                     value={form.login}
                                     onChange={(e) => setForm({ ...form, login: e.target.value })}
-                                    className="w-full bg-none px-3.5 md:px-4.5 py-2 md:py-3 border border-(--dark) rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="w-full bg-none px-3.5 md:px-4.5 py-3.5 md:py-3 border border-(--dark) rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     required
                                 />
                             </div>
@@ -68,7 +68,7 @@ export default function Login() {
                                     type="password"
                                     value={form.password}
                                     onChange={(e) => setForm({ ...form, password: e.target.value })}
-                                    className="w-full bg-none px-3.5 md:px-4.5 py-2 md:py-3 border border-(--dark) rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="w-full bg-none px-3.5 md:px-4.5 py-3.5 md:py-3 border border-(--dark) rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     required
                                 />
                             </div>
