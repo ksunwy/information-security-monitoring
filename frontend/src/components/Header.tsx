@@ -61,7 +61,7 @@ const Header = () => {
                             <li><NavLink style={getLinkStyle} to={'/admin/logs/system'}>Логи</NavLink></li>
                             <li><NavLink style={getLinkStyle} to={'/cve'}>Список уязвимостей</NavLink></li>
                         </ul>
-                        : <ul className="hidden md:fflex items-center gap-10">
+                        : <ul className="hidden md:flex items-center gap-10">
                             <li><NavLink style={getLinkStyle} to={'/assets'}>Активы</NavLink></li>
                             <li><NavLink style={getLinkStyle} to={'/analytics/vulnerabilities'}>Аналитика</NavLink></li>
                             <li><NavLink style={getLinkStyle} to={'/analytics/trends'}>Тренды</NavLink></li>

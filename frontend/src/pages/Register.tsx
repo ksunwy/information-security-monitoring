@@ -63,16 +63,18 @@ const Register = () => {
                                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                                     className="w-full bg-none px-3.5 md:px-4.5 py-4 border border-(--dark) rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     required
+                                    placeholder='Имя/Компания'
                                 />
                             </div>
                             <div className="mb-4 md:mb-8.75">
-                                <label className="block text-sm mb-.5 md:mb-1.5">Email</label>
+                                <label className="block text-sm mb-.5 md:mb-1.5">Электронная почта</label>
                                 <input
                                     type="text"
                                     value={form.email}
                                     onChange={(e) => setForm({ ...form, email: e.target.value })}
                                     className="w-full bg-none px-3.5 md:px-4.5 py-4 border border-(--dark) rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     required
+                                    placeholder='Электронная почта'
                                 />
                             </div>
 
@@ -84,6 +86,7 @@ const Register = () => {
                                     onChange={(e) => setForm({ ...form, login: e.target.value })}
                                     className="w-full bg-none px-3.5 md:px-4.5 py-3.5 border border-(--dark) rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     required
+                                    placeholder='Логин'
                                 />
                             </div>
 
@@ -95,6 +98,7 @@ const Register = () => {
                                     onChange={(e) => setForm({ ...form, password: e.target.value })}
                                     className="w-full bg-none px-3.5 md:px-4.5 py-3.5 border border-(--dark) rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     required
+                                    placeholder='Пароль'
                                 />
                             </div>
 

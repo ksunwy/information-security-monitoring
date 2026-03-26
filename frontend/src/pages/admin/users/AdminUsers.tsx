@@ -69,22 +69,22 @@ const AdminUsers = () => {
             </NavLink>
           </div>
 
-          <div className="flex flex-wrap gap-2 md:gap-6 items-center mb-4 md:mb-10">
-            <div className="flex-1 min-w-75 relative">
+          <div className="flex md:flex-row flex-col gap-2 md:gap-6 items-center mb-4 md:mb-10">
+            <div className="flex-1 md:w-75 lg:w-150 w-full relative">
               <MagnifyingGlassIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
                 type="text"
                 placeholder="Поиск по имени, email, логину..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-12 md:pr-4 pr-3 md:py-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 "
+                className="w-full md:w-75 lg:w-150 pl-12 md:pr-4 pr-3 md:py-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 "
               />
             </div>
 
             <select
               value={roleFilter}
               onChange={(e) => setRoleFilter(e.target.value)}
-              className="md:px-4 px-3 md:py-3 py-2 border text-sm md:text-base border-gray-400 rounded-lg h-12.5 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full md:min-w-45"
+              className="md:px-4 px-3 md:py-3 py-2 border text-sm md:text-base border-gray-400 rounded-lg h-12.5 focus:outline-none focus:ring-2 focus:ring-blue-500 min-w-full md:min-w-45"
             >
               <option value="">Все роли</option>
               <option value="admin">Администратор</option>

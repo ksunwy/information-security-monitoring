@@ -191,7 +191,7 @@ const AssetDetail = () => {
                   >
                     <div className="flex justify-between items-center">
                       <span className="font-medium">
-                        CVSS Score: {vuln.cvssScore}
+                        CVSS оценка: {vuln.cvssScore}
                       </span>
                       <span className="text-sm text-gray-600">
                         {vuln.fixed ? 'Исправлено' : 'Активна'}

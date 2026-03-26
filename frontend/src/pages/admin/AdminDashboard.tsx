@@ -203,7 +203,7 @@ const AdminDashboard = () => {
                                         <div key={i} className="p-4 bg-gray-50 rounded-lg h-fit">
                                             <div className="flex justify-between items-center">
                                                 <span className="font-medium">
-                                                    CVSS score: {vuln.cvssScore ? vuln.cvssScore : 'Unknown'}
+                                                    CVSS оценка: {vuln.cvssScore ? vuln.cvssScore : 'Unknown'}
                                                 </span>
                                                 <span className="text-sm text-gray-600">
                                                     {format(new Date(vuln.detectedAt!), 'dd.MM.yyyy')}
