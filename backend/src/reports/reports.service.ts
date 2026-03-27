@@ -74,16 +74,26 @@ export class ReportsService {
     return filePath;
   }
 
+/**
+ * Экспортирует список уязвимостей для указанного актива в CSV файл.
+ * 
+ * Функция создает CSV-файл с данными об уязвимостях, добавляет BOM-метку
+ * для корректного отображения кириллицы в Excel и возвращает путь к созданному файлу.
+ * 
+ */
   async exportCsv(assetId: number): Promise<string> {
+    // Определение и создание директории для отчетов
     const reportsDir = path.join(process.cwd(), 'reports');
+    // Проверяем существование директории синхронно (fs.existsSync).
     if (!fs.existsSync(reportsDir)) {
       fs.mkdirSync(reportsDir, { recursive: true });
     }
-
+    // Получение список уязвимостей, связанных с активом
     const vulns = await this.vulnsService.findByAsset(assetId);
+    // Формирование имени и пути файла
     const fileName = `vulnerabilities_asset_${assetId}.csv`;
     const filePath = path.join(reportsDir, fileName);
-
+    // Конфигурация CSV-файла
     const csvWriter = createObjectCsvWriter({
       path: filePath,
       header: [
@@ -97,14 +107,14 @@ export class ReportsService {
       fieldDelimiter: ';',
       encoding: 'utf8',
     });
-
+    // Запись данных в CSV-файл
     await csvWriter.writeRecords(vulns);
 
     const csvContent = fs.readFileSync(filePath, 'utf8');
     const csvWithBom = '\uFEFF' + csvContent;
     fs.writeFileSync(filePath, csvWithBom, { encoding: 'utf8' });
-
+    // Возвращаем путь к файлу
     return filePath;
   }
-
 }
+

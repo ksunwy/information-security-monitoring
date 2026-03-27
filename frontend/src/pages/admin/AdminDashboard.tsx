@@ -158,7 +158,7 @@ const AdminDashboard = () => {
                                     <div className="text-gray-500">Активов пока нет</div>
                                 ) : (
                                     assets.slice(0, 10).map((asset) => {
-                                        const date = new Date(String(asset.scans[0].scannedAt));
+                                        const date = asset.scans[0]?.scannedAt ? new Date(String(asset.scans[0]?.scannedAt)) : 0;
                                         return (
                                             <div
                                                 key={asset.id}

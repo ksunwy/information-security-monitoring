@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '../lib/api';
-import type { Asset, Vulnerability } from './useAssets';
+import type { Asset, Vulnerability } from '../types';
 
 const fetchAsset = async (id: string): Promise<Asset> => {
   const res = await api.get(`/assets/${id}`);

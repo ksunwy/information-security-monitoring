@@ -36,22 +36,32 @@ export class CveService {
     }
   }
 
+/**
+ * Получает детальную информацию об уязвимости CVE из базы данных NVD (National Vulnerability Database)
+ * 
+ * Функция выполняет запрос к публичному API NIST для получения подробной информации
+ * об указанной CVE. Перед запросом проводится валидация формата CVE ID.
+ * 
+ */
   async getCveDetail(id: string): Promise<any> {
+    // Валидация CVE id
     if (!id.match(/^CVE-\d{4}-\d{4,7}$/i)) {
       throw new BadRequestException('Некорректный формат CVE ID (CVE-YYYY-NNNNN)');
     }
-
+    // Формирование url запроса
     const url = `https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=${encodeURIComponent(id)}&resultsPerPage=1`;
 
     try {
+      // Запрос к серверу
       const response = await firstValueFrom(this.httpService.get(url, { headers: this.headers }));
-
+      // Проверка наличия данных в ответе
       if (!response.data || response.data.totalResults === 0 || !response.data.vulnerabilities?.length) {
         throw new NotFoundException(`CVE с ID ${id} не найдено в NVD`);
       }
-
+      // Возврат результата
       return response.data.vulnerabilities[0];
     } catch (err: any) {
+      // Обработка ошибок запроса
       console.error(`NVD error for ${id}:`, {
         status: err.response?.status,
         data: err.response?.data,
@@ -70,3 +80,4 @@ export class CveService {
     }
   }
 }
+

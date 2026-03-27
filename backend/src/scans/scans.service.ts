@@ -98,23 +98,34 @@ export class ScansService {
     return savedScan;
   }
 
+/**
+ * Выполняет сканирование портов через Nmap.
+ * Флаг `-n` отключает DNS-резолвинг, ускоряя сканирование.
+ * Библиотека node-nmap использует событийную модель, поэтому функция обернута в Promise.
+ */
   private async runNmapScan(ip: string, port?: string): Promise<{ openPorts: any[] }> {
     return new Promise((resolve, reject) => {
+      // Формирование аргументов командной строки Nmap
+      // -p- = все порты (1-65535), -n = без DNS
       const args = port
         ? `-p ${port} -n`
         : '-p- -n';
       const scan = new nmap.NmapScan(ip, args);
 
+      // Успешное завершение сканирования
       scan.on('complete', (data: any[]) => {
         if (!data || data.length === 0) return resolve({ openPorts: [] });
+        // data[0].openPorts содержит массив открытых портов
         resolve({ openPorts: data[0].openPorts || [] });
       });
 
+      // Обработка ошибок сканирования
       scan.on('error', (err: any) => {
         console.error('NMAP ERROR FULL:', err);
         reject(new BadRequestException(`Ошибка Nmap: ${err.message || 'Неизвестная ошибка'}`));
       });
 
+      // Запуск сканирования
       scan.startScan();
     });
   }
