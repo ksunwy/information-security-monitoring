@@ -5,12 +5,17 @@ import * as path from 'path';
 import { createObjectCsvWriter } from 'csv-writer';
 import { AssetsService } from '../assets/assets.service';
 import { VulnerabilitiesService } from '../vulnerabilities/vulnerabilities.service';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Report } from './report.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class ReportsService {
   constructor(
     private assetsService: AssetsService,
     private vulnsService: VulnerabilitiesService,
+    @InjectRepository(Report)
+    private reportRepo: Repository<Report>,
   ) { }
 
   async generatePdf(assetId: number): Promise<string> {
@@ -71,16 +76,24 @@ export class ReportsService {
       writeStream.on('error', reject);
     });
 
+    await this.reportRepo.save({
+      title: `Отчет по активу ${asset.name}`,
+      type: 'pdf',
+      status: 'generated',
+      asset: { id: assetId },
+      user: asset.user ? { id: asset.user.id } : null,
+    });
+
     return filePath;
   }
 
-/**
- * Экспортирует список уязвимостей для указанного актива в CSV файл.
- * 
- * Функция создает CSV-файл с данными об уязвимостях, добавляет BOM-метку
- * для корректного отображения кириллицы в Excel и возвращает путь к созданному файлу.
- * 
- */
+  /**
+   * Экспортирует список уязвимостей для указанного актива в CSV файл.
+   * 
+   * Функция создает CSV-файл с данными об уязвимостях, добавляет BOM-метку
+   * для корректного отображения кириллицы в Excel и возвращает путь к созданному файлу.
+   * 
+   */
   async exportCsv(assetId: number): Promise<string> {
     // Определение и создание директории для отчетов
     const reportsDir = path.join(process.cwd(), 'reports');
@@ -113,6 +126,16 @@ export class ReportsService {
     const csvContent = fs.readFileSync(filePath, 'utf8');
     const csvWithBom = '\uFEFF' + csvContent;
     fs.writeFileSync(filePath, csvWithBom, { encoding: 'utf8' });
+
+    const asset = await this.assetsService.findOne(assetId);
+
+    await this.reportRepo.save({
+      title: `CSV уязвимостей ${asset.name}`,
+      type: 'csv',
+      status: 'generated',
+      asset: { id: assetId },
+      user: asset.user ? { id: asset.user.id } : null,
+    });
     // Возвращаем путь к файлу
     return filePath;
   }

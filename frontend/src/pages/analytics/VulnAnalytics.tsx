@@ -1,15 +1,30 @@
 import { useVulnAnalytics } from '../../hooks/useAnalytics';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, } from 'recharts';
-import type { PieLabelRenderProps } from 'recharts';
 import { format } from 'date-fns';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import SEO from '../../components/SEO';
 import type { BarItem, PieItem, RecentVuln, SeverityStat, TopCveStat, VulnAnalyticsData } from '../../types';
+import { useIsMobile } from '../../hooks/useIsMobile';
 
-const COLORS: string[] = ['#ef4444', '#f59e0b', '#eab308', '#22c55e', '#6b7280'];
+const SEVERITY_LABELS: Record<string, string> = {
+    low: 'Низкая',
+    medium: 'Средняя',
+    high: 'Высокая',
+    critical: 'Критичная',
+    unknown: 'Неизвестная',
+};
+
+const SEVERITY_COLORS: Record<string, string> = {
+    low: '#22c55e',
+    medium: '#eab308',
+    high: '#f59e0b',
+    critical: '#ef4444',
+    unknown: '#6b7280',
+};
 
 const VulnAnalytics = () => {
+    const isMobile = useIsMobile();
     const { data, isLoading, error } = useVulnAnalytics() as {
         data: VulnAnalyticsData;
         isLoading: boolean;
@@ -30,12 +45,14 @@ const VulnAnalytics = () => {
             </div>
         );
 
-    const pieData: PieItem[] = data.bySeverity.map(
-        (item: SeverityStat) => ({
-            name: item.severity,
+    const pieData: PieItem[] = data.bySeverity.map((item: SeverityStat) => {
+        const nameRu = SEVERITY_LABELS[item.severity] || 'Неизвестная';
+        return {
+            name: nameRu,
             value: item.count,
-        })
-    );
+            color: SEVERITY_COLORS[item.severity] || SEVERITY_COLORS.unknown,
+        };
+    });
 
     const barData: BarItem[] = data.topCve.map(
         (item: TopCveStat) => ({
@@ -75,35 +92,38 @@ const VulnAnalytics = () => {
                             {barData.length !== 0 ? (
                                 <div className="h-80">
                                     <ResponsiveContainer>
-                                        <PieChart>
-                                            <Pie
-                                                data={pieData}
-                                                cx="50%"
-                                                cy="50%"
-                                                labelLine={false}
-                                                outerRadius={120}
-                                                dataKey="value"
-                                                label={(props: PieLabelRenderProps) => {
-                                                    const { name, percent } = props;
-
-                                                    if (!name) return null;
-
-                                                    return percent !== undefined
-                                                        ? `${name === "low" ? "Низкая" : name === "medium" ? "Средняя" : name === "high" ? "Высокая" : "Критичная"} ${(percent * 100).toFixed(0)}%`
-                                                        : name;
-                                                }}
-                                            >
-                                                {pieData.map(
-                                                    (_entry: PieItem, index: number) => (
-                                                        <Cell
-                                                            key={`cell-${index}`}
-                                                            fill={COLORS[index % COLORS.length]}
-                                                        />
-                                                    )
-                                                )}
-                                            </Pie>
-                                            <Tooltip />
-                                        </PieChart>
+                                        {isMobile ? (
+                                            <BarChart data={pieData} margin={{ left: -20 }}>
+                                                <CartesianGrid strokeDasharray="3 3" />
+                                                <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+                                                <YAxis tick={{ fontSize: 12 }} />
+                                                <Tooltip />
+                                                <Bar dataKey="value">
+                                                    {pieData.map((entry) => (
+                                                        <Cell key={entry.name} fill={String(entry.color)} />
+                                                    ))}
+                                                </Bar>
+                                            </BarChart>
+                                        ) : (
+                                            <PieChart>
+                                                <Pie
+                                                    data={pieData}
+                                                    cx="50%"
+                                                    cy="50%"
+                                                    labelLine={false}
+                                                    outerRadius={120}
+                                                    dataKey="value"
+                                                    label={({ name, percent }) =>
+                                                        `${name} ${percent !== undefined ? (percent * 100).toFixed(0) + '%' : ''}`
+                                                    }
+                                                >
+                                                    {pieData.map((entry) => (
+                                                        <Cell key={entry.name} fill={String(entry.color)} />
+                                                    ))}
+                                                </Pie>
+                                                <Tooltip />
+                                            </PieChart>
+                                        )}
                                     </ResponsiveContainer>
                                 </div>
                             ) : <span className='opacity-80'>Нет данных</span>}

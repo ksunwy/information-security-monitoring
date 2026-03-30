@@ -1,17 +1,19 @@
 import { useQuery } from '@tanstack/react-query';
 import api from '../lib/api';
 import { NavLink } from 'react-router-dom';
-import { Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, LineChart, CartesianGrid, XAxis, YAxis, Line } from 'recharts';
+import { Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, LineChart, CartesianGrid, XAxis, YAxis, Line, BarChart, Bar } from 'recharts';
 import { useAuth } from '../hooks/useAuth';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import SEO from '../components/SEO';
 import type { AssetStats, VulnDistribution } from '../types';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 const COLORS = ['#22c55e', '#eab308', '#f97316', '#ef4444'];
 
 const Dashboard = () => {
   const { user } = useAuth();
+  const isMobile = useIsMobile();
 
   const { data: distribution, isLoading: distLoading } = useQuery<VulnDistribution>({
     queryKey: ['vuln-distribution'],
@@ -126,27 +128,41 @@ const Dashboard = () => {
                 </div>
               ) : (
                 <ResponsiveContainer width="100%" height={300}>
-                  <PieChart>
-                    <Pie
-                      data={pieData}
-                      cx="50%"
-                      cy="50%"
-                      labelLine={false}
-                      outerRadius={100}
-                      fill="#8884d8"
-                      dataKey="value"
-                      label={({ name, percent }) => `${percent !== 0 ? `${name} ${(Number(percent) * 100).toFixed(0)}%` : ""}`}
-                    >
-                      {pieData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
-                      ))}
-                    </Pie>
-                    <Tooltip />
-                    <Legend />
-                  </PieChart>
+                  {isMobile ? (
+                    <BarChart data={pieData} margin={{left: -20}}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="name" tick={{ fontSize: 12 }}  />
+                      <YAxis tick={{ fontSize: 12 }}  />
+                      <Tooltip />
+                      <Bar dataKey="value">
+                        {pieData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Bar>
+                    </BarChart>
+                  ) : (
+                    <PieChart>
+                      <Pie
+                        data={pieData}
+                        cx="50%"
+                        cy="50%"
+                        labelLine={false}
+                        outerRadius={100}
+                        fill="#8884d8"
+                        dataKey="value"
+                        label={({ name, percent }) => `${percent !== 0 ? `${name} ${(Number(percent) * 100).toFixed(0)}%` : ""}`}
+                      >
+                        {pieData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                      <Legend />
+                    </PieChart>
+                  )}
                 </ResponsiveContainer>
               )}
-              <NavLink style={{textDecoration: "underline"}} className={"pt-2 opacity-80 transition-all duration-300 hover:text-[#334E6C]"} to={"/analytics/vulnerabilities"}>Аналитика уязвимостей</NavLink>
+              <NavLink style={{ textDecoration: "underline" }} className={"pt-2 opacity-80 transition-all duration-300 hover:text-[#334E6C]"} to={"/analytics/vulnerabilities"}>Аналитика уязвимостей</NavLink>
             </div>
 
             <div className="w-full bg-(--white) text-(--dark) rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] p-4 md:p-6">

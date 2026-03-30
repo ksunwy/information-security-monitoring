@@ -21,7 +21,7 @@ export class Report {
   description?: string;
 
   @Column()
-  type: 'vuln_summary' | 'asset_scan' | 'full_audit' | 'custom';
+  type: 'vuln_summary' | 'asset_scan' | 'full_audit' | 'custom'| 'pdf' | 'csv';
 
   @Column('jsonb', { nullable: true })
   data: any;

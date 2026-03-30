@@ -11,15 +11,15 @@ export class Asset {
   id: number;
 
   @Column()
-  ip: string; 
+  ip: string;
 
   @Column()
   name: string;
 
-  @Column({default: 'none'})
+  @Column({ default: 'none' })
   criticality: string;
 
-  @Column({default: 'offline'})
+  @Column({ default: 'offline' })
   status: string;
 
   @Column({ nullable: true })
@@ -31,13 +31,16 @@ export class Asset {
   @OneToMany(() => Vulnerability, (vuln) => vuln.asset)
   vulnerabilities: Vulnerability[];
 
-  @OneToMany(() => Report, (report) => report.asset) 
+  @OneToMany(() => Report, (report) => report.asset)
   reports: Report[];
 
   @Index()
-  @ManyToOne(() => User, (user) => user.assets, { nullable: true }) 
+  @ManyToOne(() => User, (user) => user.assets, { nullable: true })
   @JoinColumn({ name: 'userId' })
   user: User;
+
+  @Column({ nullable: true })
+  userId: number;
 
   @CreateDateColumn()
   createdAt: Date;

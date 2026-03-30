@@ -10,17 +10,17 @@ const getSeverity = (score?: number) => {
     if (!score) return 'Неизвестно';
     if (score >= 9) return 'Критичный';
     if (score >= 7) return 'Высокий';
-    if (score >= 4) return 'Средниц';
+    if (score >= 4) return 'Средний';
     return 'Низкий';
 };
 
 const getSeverityColor = (severity: string) => {
     switch (severity) {
-        case 'CRITICAL':
+        case 'Критичный':
             return 'bg-red-100 text-red-800 border-red-300';
-        case 'HIGH':
+        case 'Высокий':
             return 'bg-orange-100 text-orange-800 border-orange-300';
-        case 'MEDIUM':
+        case 'Средний':
             return 'bg-yellow-100 text-yellow-800 border-yellow-300';
         default:
             return 'bg-green-100 text-green-800 border-green-300';
@@ -81,10 +81,10 @@ const CveDetail = () => {
                     <div className="shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] backdrop-blur rounded-2xl p-8">
 
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
-                            <div>
+                            {/* <div>
                                 <p className="text-sm text-gray-500">Статус</p>
                                 <p className="font-semibold">{cve.vulnStatus}</p>
-                            </div>
+                            </div> */}
                             <div>
                                 <p className="text-sm text-gray-500">Опубликовано</p>
                                 <p className="font-semibold">

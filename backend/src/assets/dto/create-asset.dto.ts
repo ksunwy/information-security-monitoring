@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, IsNumber } from 'class-validator';
 
 export class CreateAssetDto {
   @ApiProperty({
@@ -17,6 +17,9 @@ export class CreateAssetDto {
   @IsString()
   @IsNotEmpty({ message: 'Название актива обязательно' })
   name: string;
+
+  // @IsNumber()
+  // userId: number;
 
   @ApiProperty({
     example: 'Основной веб-сервер компании',

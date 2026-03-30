@@ -29,6 +29,7 @@ import { AssetsService } from './assets.service';
 import { CreateAssetDto } from './dto/create-asset.dto';
 import { UpdateAssetDto } from './dto/update-asset.dto';
 import { Asset } from './asset.entity';
+import { Request } from '@nestjs/common';
 
 @ApiTags('Assets')
 @ApiBearerAuth()
@@ -47,8 +48,9 @@ export class AssetsController {
   @ApiBadRequestResponse({
     description: 'Некорректные данные (валидация DTO)',
   })
-  async create(@Body() dto: CreateAssetDto): Promise<Asset> {
-    return this.service.create(dto);
+  async create(@Body() dto: CreateAssetDto, @Request() req): Promise<Asset> {
+    const userId = req.user.id;
+    return this.service.create({ ...dto, userId });
   }
 
   @Get()

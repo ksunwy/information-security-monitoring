@@ -2,13 +2,21 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Asset } from './asset.entity';
+import { CreateAssetDto } from './dto/create-asset.dto';
 
 @Injectable()
 export class AssetsService {
   constructor(@InjectRepository(Asset) private repo: Repository<Asset>) { }
 
-  async create(dto: { ip: string; name: string; description?: string }): Promise<Asset> {
-    return this.repo.save(dto);
+  async create(dto: CreateAssetDto & { userId: number }): Promise<Asset> {
+    const asset = this.repo.create({
+      ip: dto.ip,
+      name: dto.name,
+      description: dto.description,
+      userId: dto.userId,
+    });
+
+    return this.repo.save(asset);
   }
 
   async findAll(): Promise<any[]> {

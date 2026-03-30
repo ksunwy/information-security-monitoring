@@ -15,36 +15,38 @@ export class AnalyticsService {
         private cveService: CveService,
     ) { }
 
-    async getVulnAnalytics(userId?: number): Promise<any> {
-        const qb = this.vulnRepo
-        .createQueryBuilder('v')
-        .innerJoin('v.asset', 'a')
-        .where('a.userId = :userId', { userId });
+    async getVulnAnalytics(userId: number): Promise<any> {
+        const baseQb = this.vulnRepo
+            .createQueryBuilder('v')
+            .leftJoin('v.asset', 'a')
+            .where('a.userId = :userId', { userId });
 
-        const total = await qb.getCount();
+        const total = await baseQb.getCount();
 
-        const bySeverity = await qb
+        const bySeverity = await baseQb
             .clone()
-            .select('v.severity, COUNT(*) as count')
+            .select('COALESCE(v.severity, \'unknown\')', 'severity')
+            .addSelect('COUNT(*)', 'count')
             .groupBy('v.severity')
-            .orderBy('count', 'DESC')
             .getRawMany();
 
-        const byStatus = await qb
+        const byStatus = await baseQb
             .clone()
-            .select('v.fixed, COUNT(*) as count')
+            .select('v.fixed', 'fixed')
+            .addSelect('COUNT(*)', 'count')
             .groupBy('v.fixed')
             .getRawMany();
 
-        const topCve = await qb
+        const topCve = await baseQb
             .clone()
-            .select('v.cveId, COUNT(*) as count')
+            .select('COALESCE(v.cveId, \'NO-CVE\')', 'cveId')
+            .addSelect('COUNT(*)', 'count')
             .groupBy('v.cveId')
             .orderBy('count', 'DESC')
             .limit(10)
             .getRawMany();
 
-        const recent = await qb
+        const recent = await baseQb
             .clone()
             .orderBy('v.detectedAt', 'DESC')
             .take(5)
@@ -52,43 +54,61 @@ export class AnalyticsService {
 
         return {
             total,
-            bySeverity: bySeverity.map(r => ({ severity: r.severity || 'unknown', count: Number(r.count) })),
-            byStatus: byStatus.map(r => ({ fixed: r.fixed === 'true', count: Number(r.count) })),
-            topCve: topCve.map(r => ({ cveId: r.cveId, count: Number(r.count) })),
+            bySeverity: bySeverity.map(r => ({
+                severity: r.severity,
+                count: Number(r.count),
+            })),
+            byStatus: byStatus.map(r => ({
+                fixed: Boolean(r.fixed),
+                count: Number(r.count),
+            })),
+            topCve: topCve.map(r => ({
+                cveId: r.cveId,
+                count: Number(r.count),
+            })),
             recent,
         };
     }
 
-    async getAssetAnalytics(userId?: number): Promise<any> {
+    async getAssetAnalytics(userId: number): Promise<any> {
         const qb = this.assetRepo
-        .createQueryBuilder('a')
-        .where('a.userId = :userId', { userId });
+            .createQueryBuilder('a')
+            .leftJoin('a.vulnerabilities', 'v')
+            .where('a.userId = :userId', { userId });
 
         const total = await qb.getCount();
 
         const withVulns = await qb
             .clone()
-            .innerJoin('a.vulnerabilities', 'v')
-            .select('COUNT(DISTINCT a.id) as count')
+            .andWhere('v.id IS NOT NULL')
+            .select('COUNT(DISTINCT a.id)', 'count')
             .getRawOne();
 
         const byStatus = await qb
             .clone()
-            .select('a.status, COUNT(*) as count')
+            .select('COALESCE(a.status, \'unknown\')', 'status')
+            .addSelect('COUNT(*)', 'count')
             .groupBy('a.status')
             .getRawMany();
 
         const byCriticality = await qb
             .clone()
-            .select('a.criticality, COUNT(*) as count')
+            .select('COALESCE(a.criticality, \'none\')', 'criticality')
+            .addSelect('COUNT(*)', 'count')
             .groupBy('a.criticality')
             .getRawMany();
 
         return {
             total,
             withVulns: Number(withVulns?.count || 0),
-            byStatus: byStatus.map(r => ({ status: r.status || 'unknown', count: Number(r.count) })),
-            byCriticality: byCriticality.map(r => ({ criticality: r.criticality || 'none', count: Number(r.count) })),
+            byStatus: byStatus.map(r => ({
+                status: r.status,
+                count: Number(r.count),
+            })),
+            byCriticality: byCriticality.map(r => ({
+                criticality: r.criticality,
+                count: Number(r.count),
+            })),
         };
     }
 
@@ -103,33 +123,44 @@ export class AnalyticsService {
     }
 
     async getReportAnalytics(userId: number): Promise<any> {
-        const total = await this.reportRepo.count({ where: { user: { id: userId } } });
-
-        const byType = await this.reportRepo
+        const qb = this.reportRepo
             .createQueryBuilder('r')
-            .where('r.userId = :userId', { userId })
-            .select('r.type, COUNT(*) as count')
+            .leftJoin('r.user', 'u')
+            .leftJoin('r.asset', 'a')
+            .where('u.id = :userId', { userId });
+
+        const total = await qb.getCount();
+
+        const byType = await qb
+            .clone()
+            .select('r.type', 'type')
+            .addSelect('COUNT(*)', 'count')
             .groupBy('r.type')
             .getRawMany();
 
-        const byStatus = await this.reportRepo
-            .createQueryBuilder('r')
-            .where('r.userId = :userId', { userId })
-            .select('r.status, COUNT(*) as count')
+        const byStatus = await qb
+            .clone()
+            .select('r.status', 'status')
+            .addSelect('COUNT(*)', 'count')
             .groupBy('r.status')
             .getRawMany();
 
-        const recent = await this.reportRepo.find({
-            where: { user: { id: userId } },
-            order: { createdAt: 'DESC' },
-            take: 10,
-            relations: ['asset'],
-        });
+        const recent = await qb
+            .clone()
+            .orderBy('r.createdAt', 'DESC')
+            .take(10)
+            .getMany();
 
         return {
             total,
-            byType: byType.map(r => ({ type: r.type, count: Number(r.count) })),
-            byStatus: byStatus.map(r => ({ status: r.status, count: Number(r.count) })),
+            byType: byType.map(r => ({
+                type: r.type,
+                count: Number(r.count),
+            })),
+            byStatus: byStatus.map(r => ({
+                status: r.status,
+                count: Number(r.count),
+            })),
             recent: recent.map(r => ({
                 id: r.id,
                 title: r.title,
