@@ -7,7 +7,7 @@ const SEO = ({
   image = "/og-image.png",
   noindex = false,
 }: {title: string, description: string, url: string, image?: string, noindex?: boolean}) => {
-  const siteName = "Мониторнг ИБ";
+  const siteName = "Мониторинг ИБ";
   const fullTitle = `${title} | ${siteName}`;
 
   return (
@@ -35,3 +35,4 @@ const SEO = ({
 };
 
 export default SEO;
+
