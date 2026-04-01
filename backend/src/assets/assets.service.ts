@@ -19,24 +19,24 @@ export class AssetsService {
     return this.repo.save(asset);
   }
 
-  async findAll(): Promise<any[]> {
+  async findAll(): Promise<Asset[]> {
     const assets = await this.repo.find({ relations: ['scans', 'vulnerabilities'] });
 
     return assets.map((asset) => {
       const criticalityOrder = { low: 0, medium: 1, high: 2, critical: 3 };
-      let maxCriticality = 'low';
 
-      if (asset.vulnerabilities?.length) {
-        maxCriticality = asset.vulnerabilities.reduce((max: string, v: any) => {
-          return criticalityOrder[v.criticality] > criticalityOrder[max] ? v.criticality : max;
-        }, 'low');
-      }
+      const maxCriticality = asset.vulnerabilities?.length
+        ? asset.vulnerabilities.reduce((max, v) => {
+          const severity = (v.severity || 'low').toLowerCase();
+          return criticalityOrder[severity] > criticalityOrder[max] ? severity : max;
+        }, 'low')
+        : 'none';
 
       const lastScan = asset.scans?.[0]?.scannedAt
         ? new Date(asset.scans[0].scannedAt).toLocaleString()
         : 'Никогда';
-      const status = asset.scans?.length ? 'Онлайн' : 'Оффлайн';
 
+      const status = asset.scans?.length ? 'Онлайн' : 'Оффлайн';
       return {
         ...asset,
         criticality: maxCriticality,
@@ -48,8 +48,31 @@ export class AssetsService {
     });
   }
 
-  async findOne(id: number): Promise<Asset> {
-    return this.repo.findOne({ where: { id }, relations: ['scans', 'vulnerabilities'] });
+  async findOne(id: number): Promise<any> {
+    const asset = await this.repo.findOne({ where: { id }, relations: ['scans', 'vulnerabilities'] });
+    if (!asset) return null;
+
+    const criticalityOrder = { low: 0, medium: 1, high: 2, critical: 3 };
+    const maxCriticality = asset.vulnerabilities?.length
+      ? asset.vulnerabilities.reduce((max, v) => {
+        return criticalityOrder[v.severity] > criticalityOrder[max] ? v.severity : max;
+      }, 'low')
+      : 'none';
+
+    const lastScan = asset.scans?.[0]?.scannedAt
+      ? new Date(asset.scans[0].scannedAt).toLocaleString()
+      : 'Никогда';
+
+    const status = asset.scans?.length ? 'Онлайн' : 'Оффлайн';
+
+    return {
+      ...asset,
+      criticality: maxCriticality,
+      status,
+      lastScan,
+      group: 'Веб-серверы',
+      owner: 'Админ',
+    };
   }
 
   async update(id: number, dto: Partial<Asset>): Promise<Asset> {

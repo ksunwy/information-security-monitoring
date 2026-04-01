@@ -1,7 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 import api from '../lib/api';
 import { fetchAssets } from './useAssets';
-import type { AdminAssetStats, AdminRecentVulnerability, AdminVulnDistribution, AdminVulnDynamics, Asset } from '../types';
+import type { AdminAssetStats, AdminRecentVulnerability, AdminVulnDistribution, Asset } from '../types';
+
+export type AdminVulnDynamics = {
+  date: string;
+  count: number;
+}[];
 
 export const useAdminDashboard = () => {
   const distribution = useQuery<AdminVulnDistribution>({

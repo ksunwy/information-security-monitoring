@@ -2,16 +2,20 @@ import Footer from '../../components/Footer';
 import Header from '../../components/Header';
 import SEO from '../../components/SEO';
 import { useAssetAnalytics } from '../../hooks/useAnalytics';
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, } from 'recharts';
 import type { AssetAnalyticsData, CriticalityStat, StatusStat } from '../../types';
+import DropdownNav from '../../components/DropdownNav';
 
-interface PieItem {
-  name: string;
-  value: number;
-  [key: string]: string | number;
-}
-
-const COLORS: string[] = ['#3b82f6', '#ef4444', '#f59e0b', '#22c55e', '#6b7280'];
+const getCriticalityInfo = (criticality: string) => {
+  const translations: Record<string, { label: string; color: string }> = {
+    none: { label: 'Без критичности', color: '#9BB0BC' },
+    low: { label: 'Низкая', color: '#22c55e' },
+    medium: { label: 'Средняя', color: '#eab308' },
+    high: { label: 'Высокая', color: '#f97316' },
+    critical: { label: 'Критичная', color: '#ef4444' },
+  };
+  return translations[criticality] || { label: 'Неизвестно', color: '#9BB0BC' };
+};
 
 const AssetAnalytics = () => {
   const { data, isLoading, error } = useAssetAnalytics() as {
@@ -26,17 +30,15 @@ const AssetAnalytics = () => {
   if (error)
     return <div className="text-center py-20 text-red-600">Ошибка загрузки</div>;
 
-  const pieStatus: PieItem[] = data.byStatus.map((item: StatusStat) => ({
+  const barStatusData = data.byStatus.map((item: StatusStat) => ({
     name: item.status,
     value: item.count,
   }));
 
-  const pieCriticality: PieItem[] = data.byCriticality.map(
-    (item: CriticalityStat) => ({
-      name: item.criticality,
-      value: item.count,
-    })
-  );
+  const barCriticalityData = data.byCriticality.map((item: CriticalityStat) => ({
+    name: getCriticalityInfo(item.criticality).label,
+    value: item.count,
+  }));
 
   return (
     <>
@@ -49,9 +51,12 @@ const AssetAnalytics = () => {
         />
 
         <div className="relative z-10 md:max-w-7xl mx-auto md:px-6">
-          <h1 className="md:text-4xl text-xl font-bold druk text-gray-900 mb-10">
-            Аналитика активов
-          </h1>
+          <div className="flex items-center justify-between mb-4 md:mb-10">
+            <h1 className="md:text-4xl text-xl font-bold druk text-gray-900">
+              Аналитика активов
+            </h1>
+            <DropdownNav />
+          </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8">
             <div className="backdrop-blur-lg rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] p-4 md:p-8 text-center">
@@ -74,27 +79,31 @@ const AssetAnalytics = () => {
               </h3>
 
               <div className="h-80">
-                <ResponsiveContainer>
-                  <PieChart>
-                    <Pie
-                      data={pieStatus}
-                      cx="50%"
-                      cy="50%"
-                      outerRadius={120}
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart
+                    data={barStatusData}
+                    margin={{ left: -10 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Bar
                       dataKey="value"
-                      label
+                      barSize={30}
+                      radius={[10, 10, 0, 0]}
                     >
-                      {pieStatus.map(
-                        (_entry: PieItem, index: number) => (
+                      {barStatusData.map((entry, index) => {
+                        const isOnline = entry.name === 'Онлайн';
+                        return (
                           <Cell
                             key={`cell-${index}`}
-                            fill={COLORS[index % COLORS.length]}
+                            fill={isOnline ? '#22c55e' : '#3B82F6'}
                           />
-                        )
-                      )}
-                    </Pie>
-                    <Tooltip />
-                  </PieChart>
+                        );
+                      })}
+                    </Bar>
+                  </BarChart>
                 </ResponsiveContainer>
               </div>
             </div>
@@ -105,27 +114,31 @@ const AssetAnalytics = () => {
               </h3>
 
               <div className="h-80">
-                <ResponsiveContainer>
-                  <PieChart>
-                    <Pie
-                      data={pieCriticality}
-                      cx="50%"
-                      cy="50%"
-                      outerRadius={120}
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart
+                    data={barCriticalityData}
+                    margin={{ left: -10 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Bar
                       dataKey="value"
-                      label
+                      barSize={30}
+                      radius={[10, 10, 0, 0]}
                     >
-                      {pieCriticality.map(
-                        (_entry: PieItem, index: number) => (
+                      {barCriticalityData.map((_, index) => {
+                        const originalCriticality = data.byCriticality[index]?.criticality || 'none';
+                        return (
                           <Cell
                             key={`cell-${index}`}
-                            fill={COLORS[index % COLORS.length]}
+                            fill={getCriticalityInfo(originalCriticality).color}
                           />
-                        )
-                      )}
-                    </Pie>
-                    <Tooltip />
-                  </PieChart>
+                        );
+                      })}
+                    </Bar>
+                  </BarChart>
                 </ResponsiveContainer>
               </div>
             </div>

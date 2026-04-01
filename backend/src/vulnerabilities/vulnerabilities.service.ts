@@ -112,4 +112,13 @@ export class VulnerabilitiesService {
 
     return this.repo.save(vuln);
   }
+
+
+  async findByUser(userId: string): Promise<Vulnerability[]> {
+    return this.repo
+      .createQueryBuilder('vuln')
+      .innerJoinAndSelect('vuln.asset', 'asset')
+      .where('asset.userId = :userId', { userId })
+      .getMany();
+  }
 }

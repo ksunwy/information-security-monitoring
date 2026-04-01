@@ -70,10 +70,18 @@ export class AnalyticsService {
         };
     }
 
-    async getAssetAnalytics(userId: number): Promise<any> {
+    async getAssetAnalytics(userId: number): Promise<{
+        total: number;
+        withVulns: number;
+        byStatus: { status: string; count: number }[];
+        byCriticality: {
+            criticality: 'none' | 'low' | 'medium' | 'high' | 'critical';
+            count: number;
+        }[];
+    }> {
         const qb = this.assetRepo
             .createQueryBuilder('a')
-            .leftJoin('a.vulnerabilities', 'v')
+            .leftJoinAndSelect('a.vulnerabilities', 'v')
             .where('a.userId = :userId', { userId });
 
         const total = await qb.getCount();
@@ -84,31 +92,72 @@ export class AnalyticsService {
             .select('COUNT(DISTINCT a.id)', 'count')
             .getRawOne();
 
-        const byStatus = await qb
-            .clone()
-            .select('COALESCE(a.status, \'unknown\')', 'status')
-            .addSelect('COUNT(*)', 'count')
-            .groupBy('a.status')
+        const raw = await this.assetRepo
+            .createQueryBuilder('a')
+            .leftJoin('a.scans', 's')
+            .where('a.userId = :userId', { userId })
+            .select('a.id', 'id')
+            .addSelect(`
+        CASE 
+            WHEN COUNT(s.id) > 0 THEN 'Онлайн'
+            ELSE 'Оффлайн'
+        END
+    `, 'status')
+            .groupBy('a.id')
             .getRawMany();
 
-        const byCriticality = await qb
-            .clone()
-            .select('COALESCE(a.criticality, \'none\')', 'criticality')
-            .addSelect('COUNT(*)', 'count')
-            .groupBy('a.criticality')
-            .getRawMany();
+        const byStatusMap = raw.reduce((acc, r) => {
+            acc[r.status] = (acc[r.status] || 0) + 1;
+            return acc;
+        }, {} as Record<string, number>);
+
+        const byStatus = Object.entries(byStatusMap).map(([status, count]) => ({
+            status,
+            count,
+        }));
+
+        const criticalityOrder = { low: 0, medium: 1, high: 2, critical: 3 };
+
+        const assetsWithVulns = await qb.getMany();
+
+        const assetCriticality = assetsWithVulns.reduce((acc, asset) => {
+            const maxSeverity = asset.vulnerabilities?.reduce((max, v) => {
+                return criticalityOrder[v.severity] > criticalityOrder[max] ? v.severity : max;
+            }, 'low') || 'none';
+
+            acc[asset.id] = maxSeverity;
+            return acc;
+        }, {} as Record<number, string>);
+
+        const criticalityLevels: Array<'none' | 'low' | 'medium' | 'high' | 'critical'> = [
+            'none',
+            'low',
+            'medium',
+            'high',
+            'critical',
+        ];
+
+        const byCriticality = criticalityLevels.map((level) => ({
+            criticality: level,
+            count: 0,
+        }));
+
+        assetsWithVulns.forEach((asset) => {
+            const criticality = assetCriticality[asset.id] || 'none';
+            const existingIndex = byCriticality.findIndex((i) => i.criticality === criticality);
+            if (existingIndex !== -1) {
+                byCriticality[existingIndex].count += 1;
+            }
+        });
 
         return {
             total,
             withVulns: Number(withVulns?.count || 0),
-            byStatus: byStatus.map(r => ({
+            byStatus: byStatus.map((r) => ({
                 status: r.status,
                 count: Number(r.count),
             })),
-            byCriticality: byCriticality.map(r => ({
-                criticality: r.criticality,
-                count: Number(r.count),
-            })),
+            byCriticality,
         };
     }
 

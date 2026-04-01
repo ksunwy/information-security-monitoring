@@ -10,7 +10,6 @@ interface FindAllParams {
   role?: string;
 }
 
-
 @Injectable()
 export class UsersService {
   constructor(
@@ -26,23 +25,36 @@ export class UsersService {
     return this.userRepository.findOne({ where: { login } });
   }
 
-  create(userData: Partial<User>): Promise<User> {
-    const user = this.userRepository.create(userData);
-    return this.userRepository.save(user);
+  async create(userData: Partial<User>): Promise<User> {
+    try {
+      const user = this.userRepository.create(userData);
+      return await this.userRepository.save(user);
+    } catch (error: unknown) {
+      if (
+        typeof error === 'object' &&
+        error !== null &&
+        'code' in error &&
+        (error as any).code === '23505'
+      ) {
+        throw new BadRequestException('Email или login уже заняты');
+      }
+
+      throw error;
+    }
   }
 
-   async findAll(params: FindAllParams = {}): Promise<User[]> {
+  async findAll(params: FindAllParams = {}): Promise<User[]> {
     const { sortBy = 'id', sortOrder = 'ASC', search, role } = params;
-    
+
     const queryBuilder = this.userRepository.createQueryBuilder('user');
-    
+
     if (search) {
       queryBuilder.where(
         '(user.name LIKE :search OR user.email LIKE :search OR user.login LIKE :search)',
         { search: `%${search}%` }
       );
     }
-    
+
     if (role) {
       if (search) {
         queryBuilder.andWhere('user.role = :role', { role });
@@ -50,14 +62,14 @@ export class UsersService {
         queryBuilder.where('user.role = :role', { role });
       }
     }
-    
+
     const allowedSortFields = ['id', 'name', 'email', 'login', 'role', 'createdAt'];
     if (allowedSortFields.includes(sortBy)) {
       queryBuilder.orderBy(`user.${sortBy}`, sortOrder);
     } else {
       queryBuilder.orderBy('user.id', 'ASC');
     }
-    
+
     return queryBuilder.getMany();
   }
 

@@ -6,6 +6,7 @@ import Footer from '../../components/Footer';
 import SEO from '../../components/SEO';
 import type { BarItem, PieItem, RecentVuln, SeverityStat, TopCveStat, VulnAnalyticsData } from '../../types';
 import { useIsMobile } from '../../hooks/useIsMobile';
+import DropdownNav from '../../components/DropdownNav';
 
 const SEVERITY_LABELS: Record<string, string> = {
     low: 'Низкая',
@@ -72,12 +73,15 @@ const VulnAnalytics = () => {
                 />
 
                 <div className="relative z-10 md:max-w-7xl mx-auto md:px-6">
-                    <h1 className="md:text-4xl text-xl font-bold druk text-gray-900 mb-10">
-                        Аналитика уязвимостей
-                    </h1>
+                    <div className="flex items-center justify-between mb-10">
+                        <h1 className="md:text-4xl text-xl font-bold druk text-gray-900">
+                            Аналитика уязвимостей
+                        </h1>
+                        <DropdownNav />
+                    </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 md:gap-8">
-                        <div className="backdrop-blur-lg rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] p-4 md:p-8 text-center">
+                        <div className="backdrop-blur-lg rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] p-4 md:p-8 text-center flex-col items-center justify-center">
                             <h3 className="md:text-xl text-lg font-semibold text-gray-800 mb-4">
                                 Всего уязвимостей
                             </h3>
@@ -177,7 +181,6 @@ const VulnAnalytics = () => {
                                                     )}
                                                 </span>
                                             </div>
-
                                             <p className="text-sm text-gray-600 mt-1 line-clamp-2">
                                                 {vuln.description ?? 'Нет описания'}
                                             </p>

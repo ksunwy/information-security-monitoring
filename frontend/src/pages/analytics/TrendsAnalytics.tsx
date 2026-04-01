@@ -1,3 +1,4 @@
+import DropdownNav from '../../components/DropdownNav';
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
 import SEO from '../../components/SEO';
@@ -17,7 +18,10 @@ const TrendsAnalytics = () => {
         <img src="/src/assets/bg.jpg" alt="фон" className="absolute inset-0 w-full h-full object-cover opacity-30 z-0" />
 
         <div className="relative z-10 md:max-w-7xl mx-auto md:px-6">
-          <h1 className="md:text-4xl text-xl font-bold druk text-gray-900 mb-4 md:mb-10">Тренды информационной безопасности</h1>
+          <div className="flex items-center justify-between mb-4 md:mb-10">
+            <h1 className="md:text-4xl text-xl font-bold druk text-gray-900">Тренды информационной безопасности</h1>
+            <DropdownNav />
+          </div>
 
           <div className="rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] backdrop-blur-lg p-4 md:p-8 border border-gray-200">
             <p className="text-gray-600 mb-4 md:mb-6">

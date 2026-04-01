@@ -1,26 +1,18 @@
 import { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '../lib/api';
-import type { Asset, Vulnerability } from '../types';
+import type { Asset } from '../types';
 
 export const fetchAssets = async (): Promise<Asset[]> => {
   const res = await api.get('/assets');
   return (res.data as any[]).map((asset: any) => {
-    const criticalityOrder = { low: 0, medium: 1, high: 2, critical: 3 };
-    let maxCriticality: 'low' | 'medium' | 'high' | 'critical' = 'low';
-
-    if (asset.vulnerabilities?.length) {
-      maxCriticality = asset.vulnerabilities.reduce((max: keyof typeof criticalityOrder, v: Vulnerability) => {
-        return criticalityOrder[v.criticality] > criticalityOrder[max] ? v.criticality : max;
-      }, 'low');
-    }
 
     const lastScan = asset.scans?.[0]?.updatedAt ? new Date(asset.scans[0].updatedAt).toLocaleString() : 'Никогда';
     const status = asset.scans?.length ? 'Онлайн' : 'Оффлайн';
 
     return {
       ...asset,
-      criticality: maxCriticality,
+      criticality: asset.criticality,
       status,
       lastScan,
       group: asset.group || 'Без группы',

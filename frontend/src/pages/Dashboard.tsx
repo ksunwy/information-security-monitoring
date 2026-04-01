@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import api from '../lib/api';
 import { NavLink } from 'react-router-dom';
-import { Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, LineChart, CartesianGrid, XAxis, YAxis, Line, BarChart, Bar } from 'recharts';
+import { Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, CartesianGrid, XAxis, YAxis, BarChart, Bar, Area, AreaChart } from 'recharts';
 import { useAuth } from '../hooks/useAuth';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -27,7 +27,7 @@ const Dashboard = () => {
 
   const { data: vulnDynamicsData, isLoading: vulnDynamicsLoading } = useQuery({
     queryKey: ['vuln-dynamics'],
-    queryFn: () => api.get('/dashboards/vuln-dynamics').then(res => res.data),
+    queryFn: () => api.get('/dashboards/vuln-dynamics/me').then(res => res.data),
   });
 
   const pieData = distribution
@@ -129,10 +129,10 @@ const Dashboard = () => {
               ) : (
                 <ResponsiveContainer width="100%" height={300}>
                   {isMobile ? (
-                    <BarChart data={pieData} margin={{left: -20}}>
+                    <BarChart data={pieData} margin={{ left: -20 }}>
                       <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="name" tick={{ fontSize: 12 }}  />
-                      <YAxis tick={{ fontSize: 12 }}  />
+                      <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+                      <YAxis tick={{ fontSize: 12 }} />
                       <Tooltip />
                       <Bar dataKey="value">
                         {pieData.map((entry, index) => (
@@ -176,45 +176,53 @@ const Dashboard = () => {
                   <div className="h-full flex items-center justify-center text-gray-500">
                     Загрузка графика...
                   </div>
-                ) : vulnDynamicsData?.data?.length ? (
+                ) : vulnDynamicsData?.length ? (
                   <ResponsiveContainer width="100%" height="100%">
-                    <LineChart
-                      data={vulnDynamicsData.data}
+                    <AreaChart
+                      data={vulnDynamicsData}
                       margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
                     >
+                      <defs>
+                        <linearGradient id="colorVulns" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#ef4444" stopOpacity={0.8} />
+                          <stop offset="95%" stopColor="#ef4444" stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+
                       <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                      <XAxis dataKey="period" stroke="#6b7280" />
+
+                      <XAxis
+                        dataKey="date"
+                        stroke="#6b7280"
+                        tickFormatter={(value) =>
+                          new Date(value).toLocaleDateString('ru-RU', {
+                            day: '2-digit',
+                            month: '2-digit',
+                          })
+                        }
+                      />
+
                       <YAxis stroke="#6b7280" />
+
                       <Tooltip
                         contentStyle={{
                           backgroundColor: 'white',
-                          border: '1px solid #e5e7eb',
                           borderRadius: '8px',
-                          boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+                          border: '1px solid #e5e7eb',
                         }}
                       />
-                      <Legend wrapperStyle={{ paddingTop: '10px' }} />
 
-                      <Line
+                      <Legend />
+
+                      <Area
                         type="monotone"
-                        dataKey="new"
-                        name="Новые уязвимости"
+                        dataKey="count"
+                        name="Найдено уязвимостей"
                         stroke="#ef4444"
-                        strokeWidth={2}
-                        dot={{ r: 4, strokeWidth: 2 }}
-                        activeDot={{ r: 6 }}
+                        fillOpacity={1}
+                        fill="url(#colorVulns)"
                       />
-
-                      <Line
-                        type="monotone"
-                        dataKey="fixed"
-                        name="Исправленные уязвимости"
-                        stroke="#22c55e"
-                        strokeWidth={2}
-                        dot={{ r: 4, strokeWidth: 2 }}
-                        activeDot={{ r: 6 }}
-                      />
-                    </LineChart>
+                    </AreaChart>
                   </ResponsiveContainer>
                 ) : (
                   <div className="h-full flex items-center justify-center text-gray-500">

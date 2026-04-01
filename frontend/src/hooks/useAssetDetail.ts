@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '../lib/api';
-import type { Asset, Vulnerability } from '../types';
+import type { Asset } from '../types';
 
 const fetchAsset = async (id: string): Promise<Asset> => {
   const res = await api.get(`/assets/${id}`);
@@ -97,13 +97,6 @@ export const useAssetDetail = () => {
     },
   });
 
-  const maxCriticality = query.data?.vulnerabilities?.length
-    ? query.data.vulnerabilities.reduce((max: Vulnerability['criticality'], v: Vulnerability) => {
-      const order = { low: 0, medium: 1, high: 2, critical: 3 };
-      return order[v.criticality] > order[max] ? v.criticality : max;
-    }, 'low')
-    : 'low';
-
   const updateMutation = useMutation({
     mutationFn: (data: { name: string; description?: string }) =>
       updateAsset(Number(id), data),
@@ -127,7 +120,6 @@ export const useAssetDetail = () => {
     error: query.error,
     scanMutation,
     navigate,
-    maxCriticality,
     getReportPDF,
     getReportCSV,
     deleteMutation,

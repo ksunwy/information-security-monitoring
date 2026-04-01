@@ -5,6 +5,7 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import SEO from '../../components/SEO';
 import type { AnalyticsData, RecentReport, ReportTypeStat } from '../../types';
+import DropdownNav from '../../components/DropdownNav';
 
 const COLORS: string[] = ['#3b82f6', '#ef4444', '#f59e0b', '#22c55e'];
 
@@ -37,9 +38,12 @@ const ReportAnalytics = () => {
         />
 
         <div className="relative z-10 md:max-w-7xl mx-auto md:px-6">
-          <h1 className="md:text-4xl text-xl font-bold druk text-gray-900 mb-4 md:mb-10">
-            Аналитика отчётов
-          </h1>
+          <div className="flex items-center justify-between mb-4 md:mb-10">
+            <h1 className="md:text-4xl text-xl font-bold druk text-gray-900">
+              Аналитика отчётов
+            </h1>
+            <DropdownNav />
+          </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8">
             <div className="backdrop-blur-lg p-4 md:p-8 rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] text-center">

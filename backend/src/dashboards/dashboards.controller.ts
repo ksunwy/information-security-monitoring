@@ -3,6 +3,7 @@ import {
   Get,
   UseGuards,
   InternalServerErrorException,
+  Req,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -23,7 +24,7 @@ import { SecurityTrendsDto } from './dto/security-trends.dto';
 @UseGuards(JwtAuthGuard)
 @Controller('dashboards')
 export class DashboardsController {
-  constructor(private readonly service: DashboardsService) {}
+  constructor(private readonly service: DashboardsService) { }
 
   @Get('vuln-distribution')
   @ApiOperation({
@@ -116,6 +117,27 @@ export class DashboardsController {
       return await this.service.securityTrends();
     } catch (error) {
       throw new InternalServerErrorException('Не удалось получить тренды безопасности');
+    }
+  }
+
+  @Get('vuln-dynamics/me')
+  @ApiOperation({
+    summary: 'Динамика уязвимостей текущего пользователя',
+    description: 'Возвращает временной ряд уязвимостей только для активов текущего пользователя',
+  })
+  @ApiOkResponse({
+    description: 'Успешно получена динамика уязвимостей пользователя',
+    type: [VulnDynamicsDto],
+  })
+  @ApiInternalServerErrorResponse({
+    description: 'Ошибка при агрегации данных',
+  })
+  async vulnDynamicsByUser(@Req() req: any): Promise<{ date: string; count: number }[]> {
+    try {
+      const userId = req.user.id;
+      return await this.service.vulnDynamicsByUser(userId);
+    } catch (error) {
+      throw new InternalServerErrorException('Не удалось получить динамику уязвимостей пользователя');
     }
   }
 }

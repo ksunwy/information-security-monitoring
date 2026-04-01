@@ -31,6 +31,7 @@ const Assets = () => {
   if (error) {
     return <div className="text-center py-10 text-red-600">Ошибка загрузки: {(error as Error).message}</div>;
   }
+console.log(assets);
 
   return (
     <>

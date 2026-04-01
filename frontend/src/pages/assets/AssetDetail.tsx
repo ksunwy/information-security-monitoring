@@ -15,7 +15,6 @@ const AssetDetail = () => {
     error,
     scanMutation,
     navigate,
-    maxCriticality,
     getReportPDF,
     getReportCSV,
     deleteMutation,
@@ -106,16 +105,16 @@ const AssetDetail = () => {
             <div className="bg-white/90 backdrop-blur-lg rounded-xl md:rounded-2xl p-4 md:p-6 shadow-lg border border-gray-200">
               <h3 className="text-lg font-semibold text-gray-800 mb-3">Критичность</h3>
               <span
-                className={`inline-block px-4 py-2 text-sm font-medium rounded-full ${maxCriticality === 'critical'
+                className={`inline-block px-4 py-2 text-sm font-medium rounded-full ${asset?.criticality === 'critical'
                   ? 'bg-red-100 text-red-800'
-                  : maxCriticality === 'high'
+                  : asset?.criticality === 'high'
                     ? 'bg-orange-100 text-orange-800'
-                    : maxCriticality === 'medium'
+                    : asset?.criticality === 'medium'
                       ? 'bg-yellow-100 text-yellow-800'
                       : 'bg-green-100 text-green-800'
                   }`}
               >
-                {maxCriticality === "low" ? "Низкая" : maxCriticality === "medium" ? "Средняя" : maxCriticality === "high" ? "Высокая" : "Критичная"}
+                {asset?.criticality === "low" ? "Низкая" : asset?.criticality === "medium" ? "Средняя" : asset?.criticality === "high" ? "Высокая" : asset?.criticality === "critical" ? "Критичная" : "Низкая"}
               </span>
             </div>
 

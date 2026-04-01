@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn, ManyToOne, Index } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn, ManyToOne, Index, Unique } from 'typeorm';
 import { Scan } from '../scans/scan.entity';
 import { Vulnerability } from '../vulnerabilities/vulnerability.entity';
 import { Report } from '../reports/report.entity';
@@ -6,6 +6,7 @@ import { User } from 'src/users/user.entity';
 import { JoinColumn } from 'typeorm';
 
 @Entity('assets')
+@Unique(['ip', 'userId'])
 export class Asset {
   @PrimaryGeneratedColumn()
   id: number;

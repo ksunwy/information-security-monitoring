@@ -56,9 +56,9 @@ export class ReportsService {
     } else {
       vulns.forEach((vuln, index) => {
         doc.fontSize(12).text(`${index + 1}. ${vuln.cveId || 'Нет CVE'}`);
-        doc.text(`   CVSS: ${vuln.cvssScore || 'N/A'} (${vuln.severity || 'N/A'})`);
-        doc.text(`   Статус: ${vuln.fixed ? 'Исправлена' : 'Активна'}`);
-        doc.text(`   Описание: ${vuln.description || 'Нет описания'}`);
+        doc.text(`CVSS: ${vuln.cvssScore || 'N/A'} (${vuln.severity || 'N/A'})`);
+        doc.text(`Статус: ${vuln.fixed ? 'Исправлена' : 'Активна'}`);
+        doc.text(`Описание: ${vuln.description || 'Нет описания'}`);
         doc.moveDown(1);
       });
     }

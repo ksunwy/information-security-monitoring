@@ -38,6 +38,13 @@ export class ScansService {
     private cveService: CveService,
   ) { }
 
+  async findAll(): Promise<Scan[]> {
+    return this.repo.find({
+      relations: ['asset'],
+      order: { scannedAt: 'DESC' },
+    });
+  }
+
   async scanAsset(assetId: number): Promise<Scan> {
     const asset = await this.assetsService.findOne(assetId);
     if (!asset) throw new NotFoundException(`Актив с ID ${assetId} не найден`);
@@ -98,11 +105,11 @@ export class ScansService {
     return savedScan;
   }
 
-/**
- * Выполняет сканирование портов через Nmap.
- * Флаг `-n` отключает DNS-резолвинг, ускоряя сканирование.
- * Библиотека node-nmap использует событийную модель, поэтому функция обернута в Promise.
- */
+  /**
+   * Выполняет сканирование портов через Nmap.
+   * Флаг `-n` отключает DNS-резолвинг, ускоряя сканирование.
+   * Библиотека node-nmap использует событийную модель, поэтому функция обернута в Promise.
+   */
   private async runNmapScan(ip: string, port?: string): Promise<{ openPorts: any[] }> {
     return new Promise((resolve, reject) => {
       // Формирование аргументов командной строки Nmap

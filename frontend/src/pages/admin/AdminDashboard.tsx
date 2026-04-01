@@ -25,7 +25,10 @@ const AdminDashboard = () => {
 
     const navigate = useNavigate();
 
-    const chartData = dynamics?.data || [];
+    const chartData = (dynamics || []).map((item: { date: string; count: number }) => ({
+        date: item.date,
+        count: item.count,
+    }));
 
     const criticalCount = distribution ? distribution.critical : 0;
     const totalVulns = distribution
@@ -115,7 +118,11 @@ const AdminDashboard = () => {
                                             </linearGradient>
                                         </defs>
                                         <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                                        <XAxis dataKey="period" stroke="#6b7280" />
+                                        <XAxis
+                                            dataKey="date"
+                                            tickFormatter={(value) => format(new Date(value), 'dd.MM')}
+                                            stroke="#6b7280"
+                                        />
                                         <YAxis stroke="#6b7280" />
                                         <Tooltip
                                             contentStyle={{
@@ -128,19 +135,11 @@ const AdminDashboard = () => {
                                         <Legend wrapperStyle={{ paddingTop: '10px' }} />
                                         <Area
                                             type="monotone"
-                                            dataKey="new"
+                                            dataKey="count"
                                             name="Новые уязвимости"
                                             stroke="#ef4444"
                                             fillOpacity={1}
                                             fill="url(#colorNew)"
-                                        />
-                                        <Area
-                                            type="monotone"
-                                            dataKey="fixed"
-                                            name="Исправленные"
-                                            stroke="#22c55e"
-                                            fillOpacity={1}
-                                            fill="url(#colorFixed)"
                                         />
                                     </AreaChart>
                                 </ResponsiveContainer>
@@ -183,7 +182,7 @@ const AdminDashboard = () => {
                                                                     : 'bg-green-100 text-green-800'
                                                             }`}
                                                     >
-                                                        {asset.criticality === "low" ? "Низкая" : asset.criticality === "medium" ? "Средняя" : asset.criticality === "high" ? "Высокая" : "Критичная"}
+                                                        {asset?.criticality === "low" ? "Низкая" : asset?.criticality === "medium" ? "Средняя" : asset?.criticality === "high" ? "Высокая" : asset?.criticality === "critical" ? "Критичная" : "Низкая"}
                                                     </span>
                                                 </div>
                                             </div>
