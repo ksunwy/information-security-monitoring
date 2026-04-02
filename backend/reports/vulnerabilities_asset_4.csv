@@ -1,4 +1,4 @@
-﻿CVE ID;Вescription;CVSS Score;Criticality;Fixed;Detected at
+﻿CVE ID;Description;CVSS Score;Criticality;Fixed;Detected at
 ;"Cross-Domain Misconfiguration
 Web browser data loading may be possible, due to a Cross Origin Resource Sharing (CORS) misconfiguration on the web server.
 Access-Control-Allow-Origin: *";5;;false;Sun Mar 01 2026 15:16:11 GMT+0300 (Moscow Standard Time)
@@ -32382,6 +32382,9 @@ Evidence: <script src=""//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/co
 ;"Cross-Domain JavaScript Source File Inclusion
 The page includes one or more script files from a third-party domain.
 Evidence: <script src=""//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js""></script>";2;;false;Sun Mar 01 2026 15:28:56 GMT+0300 (Moscow Standard Time)
+;"Timestamp Disclosure - Unix
+A timestamp was disclosed by the application/web server. - Unix
+Evidence: 2038834951";2;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
 ;"Content Security Policy (CSP) Header Not Set
 Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks, including Cross Site Scripting (XSS) and data injection attacks. These attacks are used for everything from data theft to site defacement or distribution of malware. CSP provides a set of standard HTTP headers that allow website owners to declare approved sources of content that browsers should be allowed to load on that page — covered types are JavaScript, CSS, HTML frames, fonts, images and embeddable objects such as Java applets, ActiveX, audio and video files.
 Evidence: —";5;;false;Sun Mar 01 2026 15:28:56 GMT+0300 (Moscow Standard Time)
@@ -32547,3 +32550,186 @@ Evidence: 2038834951";2;;false;Sun Mar 01 2026 15:28:56 GMT+0300 (Moscow Standar
 ;"Timestamp Disclosure - Unix
 A timestamp was disclosed by the application/web server. - Unix
 Evidence: 1981395349";2;;false;Sun Mar 01 2026 15:28:56 GMT+0300 (Moscow Standard Time)
+;"Cross-Domain Misconfiguration
+Web browser data loading may be possible, due to a Cross Origin Resource Sharing (CORS) misconfiguration on the web server.
+Evidence: Access-Control-Allow-Origin: *";5;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Cross-Domain Misconfiguration
+Web browser data loading may be possible, due to a Cross Origin Resource Sharing (CORS) misconfiguration on the web server.
+Evidence: Access-Control-Allow-Origin: *";5;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Content Security Policy (CSP) Header Not Set
+Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks, including Cross Site Scripting (XSS) and data injection attacks. These attacks are used for everything from data theft to site defacement or distribution of malware. CSP provides a set of standard HTTP headers that allow website owners to declare approved sources of content that browsers should be allowed to load on that page — covered types are JavaScript, CSS, HTML frames, fonts, images and embeddable objects such as Java applets, ActiveX, audio and video files.
+Evidence: —";5;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Cross-Domain Misconfiguration
+Web browser data loading may be possible, due to a Cross Origin Resource Sharing (CORS) misconfiguration on the web server.
+Evidence: Access-Control-Allow-Origin: *";5;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Cross-Domain JavaScript Source File Inclusion
+The page includes one or more script files from a third-party domain.
+Evidence: <script src=""//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js""></script>";2;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Cross-Domain JavaScript Source File Inclusion
+The page includes one or more script files from a third-party domain.
+Evidence: <script src=""//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js""></script>";2;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Cross-Domain Misconfiguration
+Web browser data loading may be possible, due to a Cross Origin Resource Sharing (CORS) misconfiguration on the web server.
+Evidence: Access-Control-Allow-Origin: *";5;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Cross-Domain Misconfiguration
+Web browser data loading may be possible, due to a Cross Origin Resource Sharing (CORS) misconfiguration on the web server.
+Evidence: Access-Control-Allow-Origin: *";5;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Content Security Policy (CSP) Header Not Set
+Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks, including Cross Site Scripting (XSS) and data injection attacks. These attacks are used for everything from data theft to site defacement or distribution of malware. CSP provides a set of standard HTTP headers that allow website owners to declare approved sources of content that browsers should be allowed to load on that page — covered types are JavaScript, CSS, HTML frames, fonts, images and embeddable objects such as Java applets, ActiveX, audio and video files.
+Evidence: —";5;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Cross-Domain Misconfiguration
+Web browser data loading may be possible, due to a Cross Origin Resource Sharing (CORS) misconfiguration on the web server.
+Evidence: Access-Control-Allow-Origin: *";5;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Cross-Domain JavaScript Source File Inclusion
+The page includes one or more script files from a third-party domain.
+Evidence: <script src=""//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js""></script>";2;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Cross-Domain JavaScript Source File Inclusion
+The page includes one or more script files from a third-party domain.
+Evidence: <script src=""//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js""></script>";2;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Cross-Domain Misconfiguration
+Web browser data loading may be possible, due to a Cross Origin Resource Sharing (CORS) misconfiguration on the web server.
+Evidence: Access-Control-Allow-Origin: *";5;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Modern Web Application
+The application appears to be a modern web application. If you need to explore it automatically then the Ajax Spider may well be more effective than the standard one.
+Evidence: <script src=""//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js""></script>";1;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Modern Web Application
+The application appears to be a modern web application. If you need to explore it automatically then the Ajax Spider may well be more effective than the standard one.
+Evidence: <script src=""//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js""></script>";1;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Timestamp Disclosure - Unix
+A timestamp was disclosed by the application/web server. - Unix
+Evidence: 1650485437";2;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Timestamp Disclosure - Unix
+A timestamp was disclosed by the application/web server. - Unix
+Evidence: 2038834951";2;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Timestamp Disclosure - Unix
+A timestamp was disclosed by the application/web server. - Unix
+Evidence: 1650485437";2;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Timestamp Disclosure - Unix
+A timestamp was disclosed by the application/web server. - Unix
+Evidence: 1981395349";2;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Timestamp Disclosure - Unix
+A timestamp was disclosed by the application/web server. - Unix
+Evidence: 1981395349";2;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Timestamp Disclosure - Unix
+A timestamp was disclosed by the application/web server. - Unix
+Evidence: 1701244813";2;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Timestamp Disclosure - Unix
+A timestamp was disclosed by the application/web server. - Unix
+Evidence: 2033195021";2;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Timestamp Disclosure - Unix
+A timestamp was disclosed by the application/web server. - Unix
+Evidence: 1839622642";2;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Timestamp Disclosure - Unix
+A timestamp was disclosed by the application/web server. - Unix
+Evidence: 1680327869";2;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Timestamp Disclosure - Unix
+A timestamp was disclosed by the application/web server. - Unix
+Evidence: 1863874346";2;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Timestamp Disclosure - Unix
+A timestamp was disclosed by the application/web server. - Unix
+Evidence: 1917098446";2;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Timestamp Disclosure - Unix
+A timestamp was disclosed by the application/web server. - Unix
+Evidence: 1818181818";2;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Timestamp Disclosure - Unix
+A timestamp was disclosed by the application/web server. - Unix
+Evidence: 1650485437";2;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Timestamp Disclosure - Unix
+A timestamp was disclosed by the application/web server. - Unix
+Evidence: 2038834951";2;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Timestamp Disclosure - Unix
+A timestamp was disclosed by the application/web server. - Unix
+Evidence: 1981395349";2;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Cross-Domain Misconfiguration
+Web browser data loading may be possible, due to a Cross Origin Resource Sharing (CORS) misconfiguration on the web server.
+Evidence: Access-Control-Allow-Origin: *";5;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Cross-Domain Misconfiguration
+Web browser data loading may be possible, due to a Cross Origin Resource Sharing (CORS) misconfiguration on the web server.
+Evidence: Access-Control-Allow-Origin: *";5;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Timestamp Disclosure - Unix
+A timestamp was disclosed by the application/web server. - Unix
+Evidence: 1734944650";2;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Cross-Domain Misconfiguration
+Web browser data loading may be possible, due to a Cross Origin Resource Sharing (CORS) misconfiguration on the web server.
+Evidence: Access-Control-Allow-Origin: *";5;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Content Security Policy (CSP) Header Not Set
+Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks, including Cross Site Scripting (XSS) and data injection attacks. These attacks are used for everything from data theft to site defacement or distribution of malware. CSP provides a set of standard HTTP headers that allow website owners to declare approved sources of content that browsers should be allowed to load on that page — covered types are JavaScript, CSS, HTML frames, fonts, images and embeddable objects such as Java applets, ActiveX, audio and video files.
+Evidence: —";5;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Cross-Domain Misconfiguration
+Web browser data loading may be possible, due to a Cross Origin Resource Sharing (CORS) misconfiguration on the web server.
+Evidence: Access-Control-Allow-Origin: *";5;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Cross-Domain Misconfiguration
+Web browser data loading may be possible, due to a Cross Origin Resource Sharing (CORS) misconfiguration on the web server.
+Evidence: Access-Control-Allow-Origin: *";5;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Content Security Policy (CSP) Header Not Set
+Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks, including Cross Site Scripting (XSS) and data injection attacks. These attacks are used for everything from data theft to site defacement or distribution of malware. CSP provides a set of standard HTTP headers that allow website owners to declare approved sources of content that browsers should be allowed to load on that page — covered types are JavaScript, CSS, HTML frames, fonts, images and embeddable objects such as Java applets, ActiveX, audio and video files.
+Evidence: —";5;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Cross-Domain Misconfiguration
+Web browser data loading may be possible, due to a Cross Origin Resource Sharing (CORS) misconfiguration on the web server.
+Evidence: Access-Control-Allow-Origin: *";5;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Content Security Policy (CSP) Header Not Set
+Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks, including Cross Site Scripting (XSS) and data injection attacks. These attacks are used for everything from data theft to site defacement or distribution of malware. CSP provides a set of standard HTTP headers that allow website owners to declare approved sources of content that browsers should be allowed to load on that page — covered types are JavaScript, CSS, HTML frames, fonts, images and embeddable objects such as Java applets, ActiveX, audio and video files.
+Evidence: —";5;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Cross-Domain Misconfiguration
+Web browser data loading may be possible, due to a Cross Origin Resource Sharing (CORS) misconfiguration on the web server.
+Evidence: Access-Control-Allow-Origin: *";5;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Content Security Policy (CSP) Header Not Set
+Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks, including Cross Site Scripting (XSS) and data injection attacks. These attacks are used for everything from data theft to site defacement or distribution of malware. CSP provides a set of standard HTTP headers that allow website owners to declare approved sources of content that browsers should be allowed to load on that page — covered types are JavaScript, CSS, HTML frames, fonts, images and embeddable objects such as Java applets, ActiveX, audio and video files.
+Evidence: —";5;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Cross-Domain JavaScript Source File Inclusion
+The page includes one or more script files from a third-party domain.
+Evidence: <script src=""//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js""></script>";2;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Cross-Domain JavaScript Source File Inclusion
+The page includes one or more script files from a third-party domain.
+Evidence: <script src=""//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js""></script>";2;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Cross-Domain Misconfiguration
+Web browser data loading may be possible, due to a Cross Origin Resource Sharing (CORS) misconfiguration on the web server.
+Evidence: Access-Control-Allow-Origin: *";5;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Content Security Policy (CSP) Header Not Set
+Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks, including Cross Site Scripting (XSS) and data injection attacks. These attacks are used for everything from data theft to site defacement or distribution of malware. CSP provides a set of standard HTTP headers that allow website owners to declare approved sources of content that browsers should be allowed to load on that page — covered types are JavaScript, CSS, HTML frames, fonts, images and embeddable objects such as Java applets, ActiveX, audio and video files.
+Evidence: —";5;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Cross-Domain Misconfiguration
+Web browser data loading may be possible, due to a Cross Origin Resource Sharing (CORS) misconfiguration on the web server.
+Evidence: Access-Control-Allow-Origin: *";5;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Content Security Policy (CSP) Header Not Set
+Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks, including Cross Site Scripting (XSS) and data injection attacks. These attacks are used for everything from data theft to site defacement or distribution of malware. CSP provides a set of standard HTTP headers that allow website owners to declare approved sources of content that browsers should be allowed to load on that page — covered types are JavaScript, CSS, HTML frames, fonts, images and embeddable objects such as Java applets, ActiveX, audio and video files.
+Evidence: —";5;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Cross-Domain Misconfiguration
+Web browser data loading may be possible, due to a Cross Origin Resource Sharing (CORS) misconfiguration on the web server.
+Evidence: Access-Control-Allow-Origin: *";5;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Cross-Domain Misconfiguration
+Web browser data loading may be possible, due to a Cross Origin Resource Sharing (CORS) misconfiguration on the web server.
+Evidence: Access-Control-Allow-Origin: *";5;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Modern Web Application
+The application appears to be a modern web application. If you need to explore it automatically then the Ajax Spider may well be more effective than the standard one.
+Evidence: <script src=""//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js""></script>";1;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Timestamp Disclosure - Unix
+A timestamp was disclosed by the application/web server. - Unix
+Evidence: 1650485437";2;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Timestamp Disclosure - Unix
+A timestamp was disclosed by the application/web server. - Unix
+Evidence: 2038834951";2;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Timestamp Disclosure - Unix
+A timestamp was disclosed by the application/web server. - Unix
+Evidence: 1981395349";2;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Cross-Domain Misconfiguration
+Web browser data loading may be possible, due to a Cross Origin Resource Sharing (CORS) misconfiguration on the web server.
+Evidence: Access-Control-Allow-Origin: *";5;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Content Security Policy (CSP) Header Not Set
+Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks, including Cross Site Scripting (XSS) and data injection attacks. These attacks are used for everything from data theft to site defacement or distribution of malware. CSP provides a set of standard HTTP headers that allow website owners to declare approved sources of content that browsers should be allowed to load on that page — covered types are JavaScript, CSS, HTML frames, fonts, images and embeddable objects such as Java applets, ActiveX, audio and video files.
+Evidence: —";5;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Cross-Domain Misconfiguration
+Web browser data loading may be possible, due to a Cross Origin Resource Sharing (CORS) misconfiguration on the web server.
+Evidence: Access-Control-Allow-Origin: *";5;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Content Security Policy (CSP) Header Not Set
+Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks, including Cross Site Scripting (XSS) and data injection attacks. These attacks are used for everything from data theft to site defacement or distribution of malware. CSP provides a set of standard HTTP headers that allow website owners to declare approved sources of content that browsers should be allowed to load on that page — covered types are JavaScript, CSS, HTML frames, fonts, images and embeddable objects such as Java applets, ActiveX, audio and video files.
+Evidence: —";5;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Cross-Domain Misconfiguration
+Web browser data loading may be possible, due to a Cross Origin Resource Sharing (CORS) misconfiguration on the web server.
+Evidence: Access-Control-Allow-Origin: *";5;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Content Security Policy (CSP) Header Not Set
+Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks, including Cross Site Scripting (XSS) and data injection attacks. These attacks are used for everything from data theft to site defacement or distribution of malware. CSP provides a set of standard HTTP headers that allow website owners to declare approved sources of content that browsers should be allowed to load on that page — covered types are JavaScript, CSS, HTML frames, fonts, images and embeddable objects such as Java applets, ActiveX, audio and video files.
+Evidence: —";5;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)
+;"Cross-Domain Misconfiguration
+Web browser data loading may be possible, due to a Cross Origin Resource Sharing (CORS) misconfiguration on the web server.
+Evidence: Access-Control-Allow-Origin: *";5;;false;Sat Mar 21 2026 12:04:04 GMT+0300 (Moscow Standard Time)

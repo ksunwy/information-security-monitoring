@@ -18,7 +18,7 @@ export class ReportsService {
     private reportRepo: Repository<Report>,
   ) { }
 
-  async generatePdf(assetId: number): Promise<string> {
+  async generatePdf(assetId: number, userId: number): Promise<string> {
     const reportsDir = path.join(process.cwd(), 'reports');
     if (!fs.existsSync(reportsDir)) {
       fs.mkdirSync(reportsDir, { recursive: true });
@@ -80,8 +80,8 @@ export class ReportsService {
       title: `Отчет по активу ${asset.name}`,
       type: 'pdf',
       status: 'generated',
-      asset: { id: assetId },
-      user: asset.user ? { id: asset.user.id } : null,
+      asset: asset,
+      user: { id: userId },
     });
 
     return filePath;
@@ -94,7 +94,7 @@ export class ReportsService {
    * для корректного отображения кириллицы в Excel и возвращает путь к созданному файлу.
    * 
    */
-  async exportCsv(assetId: number): Promise<string> {
+  async exportCsv(assetId: number, userId: number): Promise<string> {
     // Определение и создание директории для отчетов
     const reportsDir = path.join(process.cwd(), 'reports');
     // Проверяем существование директории синхронно (fs.existsSync).
@@ -133,8 +133,8 @@ export class ReportsService {
       title: `CSV уязвимостей ${asset.name}`,
       type: 'csv',
       status: 'generated',
-      asset: { id: assetId },
-      user: asset.user ? { id: asset.user.id } : null,
+      asset: asset,
+      user: { id: userId },
     });
     // Возвращаем путь к файлу
     return filePath;

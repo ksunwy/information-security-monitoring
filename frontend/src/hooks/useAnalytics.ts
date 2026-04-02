@@ -22,9 +22,9 @@ export const useTrendsAnalytics = () => {
   });
 };
 
-export const useReportAnalytics = () => {
+export const useReportAnalytics = (userId: number) => {
   return useQuery({
-    queryKey: ['report-analytics'],
-    queryFn: () => api.get('/analytics/reports').then(res => res.data),
+    queryKey: ['report-analytics', userId],
+    queryFn: () => api.get('/analytics/reports', { params: { userId } }).then(res => res.data),
   });
 };

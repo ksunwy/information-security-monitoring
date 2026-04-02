@@ -26,14 +26,13 @@ export class VulnerabilitiesService {
       const cves = response.data.vulnerabilities || [];
 
       for (const cve of cves) {
-        const cveId = cve.cve.id;
         const description = cve.cve.descriptions[0].value;
         const cvssScore = cve.cve.metrics.cvssMetricV31?.[0]?.cvssData?.baseScore || 0;
         const criticality = this.determineCriticality(cvssScore);
 
         const vuln = await this.repo.save({
           asset: scan.asset,
-          cveId,
+          cveId: cve.cve.id,
           description,
           cvssScore,
           criticality,

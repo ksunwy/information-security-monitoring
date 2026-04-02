@@ -172,52 +172,53 @@ export class AnalyticsService {
     }
 
     async getReportAnalytics(userId: number): Promise<any> {
-        const qb = this.reportRepo
-            .createQueryBuilder('r')
-            .leftJoin('r.user', 'u')
-            .leftJoin('r.asset', 'a')
-            .where('u.id = :userId', { userId });
+    const qb = this.reportRepo
+        .createQueryBuilder('r')
+        .leftJoinAndSelect('r.user', 'u') 
+        .leftJoinAndSelect('r.asset', 'a') 
+        .where('u.id = :userId', { userId });
 
-        const total = await qb.getCount();
+    const total = await qb.getCount();
 
-        const byType = await qb
-            .clone()
-            .select('r.type', 'type')
-            .addSelect('COUNT(*)', 'count')
-            .groupBy('r.type')
-            .getRawMany();
+    const byType = await qb
+        .clone()
+        .select('r.type', 'type')
+        .addSelect('COUNT(*)', 'count')
+        .groupBy('r.type')
+        .getRawMany();
 
-        const byStatus = await qb
-            .clone()
-            .select('r.status', 'status')
-            .addSelect('COUNT(*)', 'count')
-            .groupBy('r.status')
-            .getRawMany();
+    const byStatus = await qb
+        .clone()
+        .select('r.status', 'status')
+        .addSelect('COUNT(*)', 'count')
+        .groupBy('r.status')
+        .getRawMany();
 
-        const recent = await qb
-            .clone()
-            .orderBy('r.createdAt', 'DESC')
-            .take(10)
-            .getMany();
+    const recent = await qb
+        .clone()
+        .orderBy('r.createdAt', 'DESC')
+        .take(10)
+        .getMany();
 
-        return {
-            total,
-            byType: byType.map(r => ({
-                type: r.type,
-                count: Number(r.count),
-            })),
-            byStatus: byStatus.map(r => ({
-                status: r.status,
-                count: Number(r.count),
-            })),
-            recent: recent.map(r => ({
-                id: r.id,
-                title: r.title,
-                type: r.type,
-                status: r.status,
-                createdAt: r.createdAt,
-                assetName: r.asset?.name || r.asset?.ip || 'Без актива',
-            })),
-        };
-    }
+    return {
+        total,
+        byType: byType.map(r => ({
+            type: r.type,
+            count: Number(r.count),
+        })),
+        byStatus: byStatus.map(r => ({
+            status: r.status,
+            count: Number(r.count),
+        })),
+        recent: recent.map(r => ({
+            id: r.id,
+            title: r.title,
+            type: r.type,
+            status: r.status,
+            createdAt: r.createdAt,
+            assetId: r.asset?.id, 
+            assetName: r.asset?.name || r.asset?.ip || 'Без актива',
+        })),
+    };
+}
 }

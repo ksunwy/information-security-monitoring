@@ -133,7 +133,7 @@ const VulnAnalytics = () => {
                             ) : <span className='opacity-80'>Нет данных</span>}
                         </div>
 
-                        <div className="backdrop-blur-lg p-8 rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] lg:col-span-2">
+                        {/* <div className="backdrop-blur-lg p-8 rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] lg:col-span-2">
                             <h3 className="text-xl font-semibold text-gray-800 mb-6 text-center">
                                 Топ-10 CVE по количеству
                             </h3>
@@ -156,7 +156,7 @@ const VulnAnalytics = () => {
                                     </ResponsiveContainer>
                                 </div>
                             ) : <span className='opacity-80'>Нет данных</span>}
-                        </div>
+                        </div> */}
 
                         <div className="backdrop-blur-lg p-8 rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] lg:col-span-2">
                             <h3 className="text-xl font-semibold text-gray-800 mb-6">

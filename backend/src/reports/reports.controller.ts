@@ -6,6 +6,7 @@ import {
   UseGuards,
   Res,
   NotFoundException,
+  Req,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -44,9 +45,11 @@ export class ReportsController {
   async pdf(
     @Param('assetId', ParseIntPipe) assetId: number,
     @Res() res: Response,
+    @Req() req: Request & { user: { id: number } },
   ): Promise<void> {
     try {
-      const filePath = await this.service.generatePdf(assetId);
+      const userId = req.user.id;
+      const filePath = await this.service.generatePdf(assetId, userId);
 
       if (!fs.existsSync(filePath)) {
         throw new NotFoundException('PDF-файл не был создан');
@@ -87,9 +90,11 @@ export class ReportsController {
   async csv(
     @Param('assetId', ParseIntPipe) assetId: number,
     @Res() res: Response,
+    @Req() req: Request & { user: { id: number } },
   ): Promise<void> {
     try {
-      const filePath = await this.service.exportCsv(assetId);
+      const userId = req.user.id;
+      const filePath = await this.service.exportCsv(assetId, userId);
 
       if (!fs.existsSync(filePath)) {
         throw new NotFoundException('CSV-файл не был создан');

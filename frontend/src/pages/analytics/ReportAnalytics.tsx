@@ -6,11 +6,26 @@ import Footer from '../../components/Footer';
 import SEO from '../../components/SEO';
 import type { AnalyticsData, RecentReport, ReportTypeStat } from '../../types';
 import DropdownNav from '../../components/DropdownNav';
+import { useAuth } from '../../hooks/useAuth';
 
 const COLORS: string[] = ['#3b82f6', '#ef4444', '#f59e0b', '#22c55e'];
 
+const getTypeLabel = (type: string): string => {
+  const typeLabels: Record<string, string> = {
+    pdf: 'PDF-отчёт',
+    csv: 'CSV-отчёт',
+    vuln_summary: 'Сводка уязвимостей',
+    asset_scan: 'Скан актива',
+    full_audit: 'Полный аудит',
+    custom: 'Пользовательский отчёт',
+  };
+  return typeLabels[type] || type;
+};
+
 const ReportAnalytics = () => {
-  const { data, isLoading, error } = useReportAnalytics() as {
+  const { user } = useAuth();
+  const userId = user!.id
+  const { data, isLoading, error } = useReportAnalytics(userId) as {
     data: AnalyticsData;
     isLoading: boolean;
     error: unknown;
@@ -23,7 +38,7 @@ const ReportAnalytics = () => {
     return <div className="text-center py-20 text-red-600">Ошибка загрузки</div>;
 
   const pieType = data.byType.map((item: ReportTypeStat) => ({
-    name: item.type,
+    name: getTypeLabel(item.type),
     value: item.count,
   }));
 
@@ -52,12 +67,10 @@ const ReportAnalytics = () => {
               </h3>
               <p className="md:text-5xl text-2xl font-bold text-blue-600">{data.total}</p>
             </div>
-
             <div className="backdrop-blur-lg p-4 md:p-8 rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC]">
               <h3 className="md:text-xl text-lg font-semibold text-gray-800 mb-6 text-center">
                 Распределение по типам
               </h3>
-
               <div className="h-80">
                 <ResponsiveContainer>
                   <PieChart>
@@ -67,7 +80,8 @@ const ReportAnalytics = () => {
                       cy="50%"
                       outerRadius={120}
                       dataKey="value"
-                      label
+                      nameKey="name"
+                      label={({ name, percent, payload }) => `${name}: ${(percent! * 100).toFixed(0)}% (${payload.value})`}
                     >
                       {pieType.map(
                         (_entry: { name: string; value: number }, index: number) => (
@@ -78,7 +92,12 @@ const ReportAnalytics = () => {
                         )
                       )}
                     </Pie>
-                    <Tooltip />
+                    <Tooltip
+                      contentStyle={{ backgroundColor: '#fff', border: '1px solid #ccc' }}
+                      itemStyle={{ color: '#333' }}
+                      labelStyle={{ color: '#333', fontWeight: 'bold' }}
+                      separator=": "
+                    />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
@@ -88,7 +107,6 @@ const ReportAnalytics = () => {
               <h3 className="md:text-xl text-lg font-semibold text-gray-800 mb-6">
                 Последние отчёты
               </h3>
-
               <div className="space-y-4">
                 {data.recent.map((report: RecentReport) => (
                   <div
@@ -104,7 +122,6 @@ const ReportAnalytics = () => {
                           {report.type} • {report.status}
                         </p>
                       </div>
-
                       <span className="text-sm text-gray-500">
                         {format(new Date(report.createdAt), 'dd.MM.yyyy HH:mm')}
                       </span>
