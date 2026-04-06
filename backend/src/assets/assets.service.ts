@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Asset } from './asset.entity';
@@ -9,13 +9,15 @@ export class AssetsService {
   constructor(@InjectRepository(Asset) private repo: Repository<Asset>) { }
 
   async create(dto: CreateAssetDto & { userId: number }): Promise<Asset> {
-    const asset = this.repo.create({
-      ip: dto.ip,
-      name: dto.name,
-      description: dto.description,
-      userId: dto.userId,
+    const exists = await this.repo.findOne({
+      where: { ip: dto.ip, userId: dto.userId },
     });
 
+    if (exists) {
+      throw new BadRequestException('Актив с таким IP уже существует');
+    }
+
+    const asset = this.repo.create(dto);
     return this.repo.save(asset);
   }
 

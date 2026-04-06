@@ -200,9 +200,11 @@ export class ScansService {
 
     const [ipOnly, portOnly] = asset.ip.split(':');
     const protocol = ports.some(p => p.port === 443) ? 'https' : 'http';
-    const dockerHost = ipOnly === '127.0.0.1' || ipOnly === 'localhost'
-      ? 'host.docker.internal'
-      : ipOnly;
+
+    const dockerHost =
+      ipOnly === '127.0.0.1' || ipOnly === 'localhost'
+        ? 'host.docker.internal'
+        : ipOnly;
 
     const targetUrl = portOnly
       ? `${protocol}://${dockerHost}:${portOnly}`
@@ -212,52 +214,91 @@ export class ScansService {
     const ZAP_API_KEY = process.env.ZAP_API_KEY || 'change-me-9203935709';
 
     try {
-      const spiderResp = await axios.get(`${ZAP_URL}/JSON/spider/action/scan/`, {
-        params: { url: targetUrl, maxChildren: 10, maxDepth: 5, apikey: ZAP_API_KEY },
+      console.log('ZAP TARGET:', targetUrl);
+
+      const request = async (url: string, params: any) => {
+        for (let i = 0; i < 3; i++) {
+          try {
+            return await axios.get(url, { params, timeout: 60000 });
+          } catch (e) {
+            if (i === 2) throw e;
+            await new Promise(r => setTimeout(r, 2000));
+          }
+        }
+      };
+
+      const spiderResp = await request(`${ZAP_URL}/JSON/spider/action/scan/`, {
+        url: targetUrl,
+        maxChildren: 100,
+        maxDepth: 10,
+        apikey: ZAP_API_KEY,
       });
+
       const spiderId = spiderResp.data.scan;
 
       let spiderStatus = 0;
       while (spiderStatus < 100) {
-        await new Promise(r => setTimeout(r, 5000));
-        const s = await axios.get(`${ZAP_URL}/JSON/spider/view/status/`, {
-          params: { scanId: spiderId, apikey: ZAP_API_KEY },
+        await new Promise(r => setTimeout(r, 3000));
+
+        const s = await request(`${ZAP_URL}/JSON/spider/view/status/`, {
+          scanId: spiderId,
+          apikey: ZAP_API_KEY,
         });
+
         spiderStatus = Number(s.data.status);
+        console.log('Spider progress:', spiderStatus);
       }
 
-      const scanResp = await axios.get(`${ZAP_URL}/JSON/ascan/action/scan/`, {
-        params: {
-          url: targetUrl,
-          recurse: 'true',
-          inScopeOnly: 'true',
-          maxRuleDurationInMins: '3',
-          maxScanDurationInMins: '15',
-          maxRuleInactivityInMins: '2',
-          apikey: ZAP_API_KEY,
-        },
+      const scanResp = await request(`${ZAP_URL}/JSON/ascan/action/scan/`, {
+        url: targetUrl,
+        recurse: true,
+        inScopeOnly: true,
+        apikey: ZAP_API_KEY,
       });
+
       const scanId = scanResp.data.scan;
 
       let progress = 0;
-      const scanStart = Date.now();
-      while (progress < 100 && Date.now() - scanStart < 20 * 60 * 1000) {
-        await new Promise(r => setTimeout(r, 10000));
-        const status = await axios.get(`${ZAP_URL}/JSON/ascan/view/status/`, {
-          params: { scanId, apikey: ZAP_API_KEY },
+      while (progress < 100) {
+        await new Promise(r => setTimeout(r, 5000));
+
+        const status = await request(`${ZAP_URL}/JSON/ascan/view/status/`, {
+          scanId,
+          apikey: ZAP_API_KEY,
         });
+
         progress = Number(status.data.status);
+        console.log('Active scan progress:', progress);
       }
 
-      const alertsResp = await axios.get(`${ZAP_URL}/JSON/core/view/alerts/`, {
-        params: { baseurl: targetUrl, apikey: ZAP_API_KEY },
-      });
+      await new Promise(r => setTimeout(r, 5000));
 
-      const alerts = alertsResp.data.alerts || [];
+      let allAlerts: any[] = [];
+      let start = 0;
+      const count = 100;
+
+      while (true) {
+        const resp = await request(`${ZAP_URL}/JSON/core/view/alerts/`, {
+          baseurl: targetUrl,
+          start,
+          count,
+          apikey: ZAP_API_KEY,
+        });
+
+        const chunk = resp.data.alerts || [];
+        allAlerts.push(...chunk);
+
+        if (chunk.length < count) break;
+        start += count;
+      }
+
+      console.log('Total alerts:', allAlerts.length);
+
       let alertsCount = 0;
 
-      for (const alert of alerts) {
+      for (const alert of allAlerts) {
         alertsCount++;
+
         await this.vulnsService.createVulnerabilityFromCve({
           assetId: asset.id,
           cveId: null,
@@ -270,11 +311,18 @@ export class ScansService {
 
       const durationMs = Date.now() - startTime;
 
-      return { scanId, alertsCount, durationMs };
+      return {
+        scanId,
+        alertsCount,
+        durationMs,
+      };
 
     } catch (error) {
-      console.error('ZAP Error:', error);
-      throw new BadRequestException(`ZAP failed: ${error}`);
+      console.error('ZAP ERROR FULL:', error);
+
+      throw new BadRequestException(
+        `ZAP failed: ${error}`,
+      );
     }
   }
 

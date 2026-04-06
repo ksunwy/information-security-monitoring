@@ -165,7 +165,7 @@ console.log(assets);
                                 : 'bg-green-100 text-green-800'
                             }`}
                         >
-                          {asset.criticality === "low" ? "Низкая" : asset.criticality === "medium" ? "Средняя" : asset.criticality === "high" ? "Высокая" : "Критичная"}
+                          {asset.criticality === "low" ? "Низкая" : asset.criticality === "medium" ? "Средняя" : asset.criticality === "high" ? "Высокая" : asset.criticality === "critical" ? "Критичная" : "Не критично"}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">

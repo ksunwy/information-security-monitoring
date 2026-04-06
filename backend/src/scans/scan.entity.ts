@@ -6,23 +6,25 @@ export class Scan {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Asset, (asset) => asset.scans)
+  @ManyToOne(() => Asset, (asset) => asset.scans, {
+    onDelete: 'CASCADE',
+  })
   asset: Asset;
 
-  @Column('jsonb') 
-  ports: any[]; 
+  @Column('jsonb')
+  ports: any[];
 
-  @Column({default: 'not scanned'})
+  @Column({ default: 'not scanned' })
   status: string;
 
-  @Column({default: 'not scanned'})
+  @Column({ default: 'not scanned' })
   scan_result: string;
 
-  @Column({default: 'not scanned'})
+  @Column({ default: 'not scanned' })
   scan_type: string;
 
   @Column('jsonb', { nullable: true })
-  changes: any; 
+  changes: any;
 
   @Column('jsonb', { nullable: true })
   os: any;
@@ -34,13 +36,13 @@ export class Scan {
   scannedAt: Date;
 
   @Column({ type: 'varchar', nullable: true })
-  zapScanId: string | null;         
+  zapScanId: string | null;
 
   @Column({ default: 0 })
-  webVulnerabilitiesCount: number;    
+  webVulnerabilitiesCount: number;
 
   @Column({ type: 'bigint', nullable: true })
-  zapDurationMs: number | null;      
+  zapDurationMs: number | null;
 
   @Column({ type: 'varchar', length: 500, nullable: true })
   scanResultDetails: string | null;

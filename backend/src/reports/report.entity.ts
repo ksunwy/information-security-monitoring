@@ -35,7 +35,7 @@ export class Report {
   @ManyToOne(() => User, (user) => user.reports, { nullable: true })
   user: User;
 
-  @ManyToOne(() => Asset, (asset) => asset.reports, { nullable: true })
+  @ManyToOne(() => Asset, (asset) => asset.reports, { nullable: true, onDelete: 'CASCADE', })
   asset?: Asset;
 
   @CreateDateColumn()

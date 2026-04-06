@@ -158,7 +158,7 @@ const AssetDetail = () => {
                   <div key={idx} className="p-4 bg-gray-50 rounded-lg">
                     <div className="flex justify-between items-center">
                       <span className="text-sm font-medium text-gray-700">
-                        Статус: {scan.status || 'Завершён'}
+                        Статус: {scan.status === "completed" ? 'Завершён' : scan.status || 'Завершён'}
                       </span>
                       <span className="text-sm text-gray-500">
                         {scan.scannedAt ? format(new Date(scan.scannedAt), 'dd.MM.yyyy HH:mm') : '-'}

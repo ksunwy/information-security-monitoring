@@ -32,19 +32,19 @@ export const useAssetNew = () => {
   });
 
   const isValidIP = (value: string) => {
-    const ipRegex =
-      /^(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)$/;
-    return ipRegex.test(value);
+    const ipWithPortRegex =
+      /^(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(:\d{1,5})?$/;
+    return ipWithPortRegex.test(value);
   };
 
   const isValidDomain = (value: string) => {
     const domainRegex =
-      /^(?!-)[A-Za-z0-9-]{1,63}(?<!-)\.[A-Za-z]{2,}$/;
+      /^(?!-)[A-Za-z0-9-]{1,63}(?<!-)\.[A-Za-z]{2,}(:\d{1,5})?$/;
     return domainRegex.test(value);
   };
 
   const isValidName = (value: string) => {
-    return /^[a-zA-Zа-яА-ЯёЁ0-9\s-]{3,50}$/.test(value);
+    return /^[a-zA-Zа-яА-ЯёЁ0-9\s\-.:]{3,50}$/.test(value);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
