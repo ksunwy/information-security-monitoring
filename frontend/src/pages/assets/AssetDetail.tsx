@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ArrowLeftIcon, PlayIcon } from '@heroicons/react/24/outline';
 import { format } from 'date-fns';
 import { useAssetDetail } from '../../hooks/useAssetDetail';
@@ -35,6 +35,42 @@ const AssetDetail = () => {
       });
     }
   }, [asset]);
+
+  const [translations, setTranslations] = useState<{ [key: string]: string }>({});
+  const [visibleVulnerabilities, setVisibleVulnerabilities] = useState<Vulnerability[]>([]);
+  const [visibleCount, setVisibleCount] = useState(10);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!asset?.vulnerabilities?.length) return;
+
+    asset.vulnerabilities.forEach((vuln) => {
+      const text = vuln.description;
+      if (!text || translations[vuln.cveId!]) return;
+
+      fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|ru&de=ksunnwy@gmail.com`)
+        .then(res => res.json())
+        .then(data => {
+          setTranslations(prev => ({ ...prev, [vuln.cveId!]: data.responseData.translatedText }));
+        })
+        .catch(() => {
+          setTranslations(prev => ({ ...prev, [vuln.cveId!]: text }));
+        });
+    });
+  }, [asset?.vulnerabilities]);
+
+  useEffect(() => {
+    if (!asset?.vulnerabilities?.length) return;
+    setVisibleVulnerabilities(asset.vulnerabilities.slice(0, visibleCount));
+  }, [asset?.vulnerabilities, visibleCount]);
+
+  const handleScroll = () => {
+    if (!containerRef.current) return;
+    const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
+    if (scrollTop + clientHeight >= scrollHeight - 50) {
+      setVisibleCount(prev => prev + 10);
+    }
+  };
 
   if (isLoading) {
     return <div className="text-center py-20 text-gray-600">Загрузка...</div>;
@@ -172,11 +208,11 @@ const AssetDetail = () => {
             )}
           </div>
 
-          <div className="bg-white/90 backdrop-blur-lg rounded-xl md:rounded-2xl p-4 md:p-6 shadow-lg border border-gray-200 max-h-150 overflow-y-auto">
+          <div ref={containerRef} onScroll={handleScroll} className="bg-white/90 backdrop-blur-lg rounded-xl md:rounded-2xl p-4 md:p-6 shadow-lg border border-gray-200 max-h-150 overflow-y-auto">
             <h3 className="text-xl font-bold text-gray-900 mb-4">Уязвимости</h3>
-            {asset.vulnerabilities?.length ? (
+            {visibleVulnerabilities?.length ? (
               <div className="space-y-4">
-                {asset.vulnerabilities.map((vuln: Vulnerability, idx: number) => (
+                {visibleVulnerabilities.map((vuln: Vulnerability, idx: number) => (
                   <div
                     key={idx}
                     className={`p-4 rounded-lg ${vuln.criticality === 'critical'
@@ -202,7 +238,11 @@ const AssetDetail = () => {
                       </p>
                     )}
                     {vuln.description && (
-                      <p className="mt-1 text-sm text-gray-600">{vuln.description}</p>
+                      <p className="mt-1 text-sm text-gray-600">
+                        {translations[vuln.cveId!] && !translations[vuln.cveId!]?.includes('MYMEMORY WARNING')
+                        ? translations[vuln.cveId!]
+                        : vuln.description}
+                      </p>
                     )}
                   </div>
                 ))}

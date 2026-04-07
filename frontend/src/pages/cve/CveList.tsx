@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCveList } from '../../hooks/useCve';
 import { format } from 'date-fns';
@@ -6,6 +6,14 @@ import { MagnifyingGlassIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroico
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import SEO from '../../components/SEO';
+
+const getSeverityColor = (score?: number) => {
+  if (!score) return 'bg-gray-100 text-gray-800';
+  if (score >= 9.0) return 'bg-red-100 text-red-800';
+  if (score >= 7.0) return 'bg-orange-100 text-orange-800';
+  if (score >= 4.0) return 'bg-yellow-100 text-yellow-800';
+  return 'bg-green-100 text-green-800';
+};
 
 const CveList = () => {
   const navigate = useNavigate();
@@ -19,13 +27,29 @@ const CveList = () => {
     setPage(1);
   };
 
-  const getSeverityColor = (score?: number) => {
-    if (!score) return 'bg-gray-100 text-gray-800';
-    if (score >= 9.0) return 'bg-red-100 text-red-800';
-    if (score >= 7.0) return 'bg-orange-100 text-orange-800';
-    if (score >= 4.0) return 'bg-yellow-100 text-yellow-800';
-    return 'bg-green-100 text-green-800';
-  };
+  const [translations, setTranslations] = useState<{ [key: string]: string }>({});
+
+  useEffect(() => {
+    if (!vulnerabilities?.length) return;
+
+    vulnerabilities.forEach(({ cve }) => {
+      const text = cve.descriptions?.find(d => d.lang === 'en')?.value;
+      if (!text) return;
+
+      if (translations[cve.id]) return;
+
+      fetch(
+        `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|ru&de=ksunnwy@gmail.com`
+      )
+        .then(res => res.json())
+        .then(data => {
+          setTranslations(prev => ({ ...prev, [cve.id]: data.responseData.translatedText }));
+        })
+        .catch(() => {
+          setTranslations(prev => ({ ...prev, [cve.id]: text }));
+        });
+    });
+  }, [vulnerabilities, translations]);
 
   return (
     <>
@@ -85,6 +109,9 @@ const CveList = () => {
                             : 'Низкий'
                       : 'Неизвестно';
 
+                    const englishText = cve.descriptions?.find(d => d.lang === 'en')?.value || 'Описание отсутствует';
+                    const russianText = translations[cve.id] && !translations[cve.id]?.includes('MYMEMORY WARNING') ? translations[cve.id] : englishText;
+
                     return (
                       <div
                         key={cve.id}
@@ -92,8 +119,8 @@ const CveList = () => {
                         className="bg-(--white) rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] backdrop-blur-lg p-6 border border-gray-200 hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 cursor-pointer"
                       >
                         <h3 className="text-xl font-bold text-gray-900 mb-3">{cve.id}</h3>
-                        <p className="text-sm text-gray-700 mb-4 line-clamp-4">
-                          {cve.descriptions?.find(d => d.lang === 'en')?.value || 'Описание отсутствует'}
+                        <p key={cve.id} className="text-sm text-gray-700 mb-4 line-clamp-4">
+                          {russianText}
                         </p>
                         <div className="flex flex-wrap justify-between items-center gap-3">
                           <span className={`px-4 py-1.5 text-sm font-semibold rounded-full ${getSeverityColor(score)}`}>

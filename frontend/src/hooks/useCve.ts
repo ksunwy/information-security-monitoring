@@ -3,7 +3,7 @@ import api from '../lib/api';
 import type { CveListResponse } from '../types';
 
 export const useCveList = (keyword: string = '', page: number = 1) => {
-  const resultsPerPage = 20;
+  const resultsPerPage = 9;
   const startIndex = (page - 1) * resultsPerPage;
 
   const query = useQuery<CveListResponse>({

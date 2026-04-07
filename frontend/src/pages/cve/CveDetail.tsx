@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useCveDetail } from '../../hooks/useCveDetail';
 import { format } from 'date-fns';
@@ -32,6 +33,18 @@ const CveDetail = () => {
     const navigate = useNavigate();
 
     const { cve, isLoading, isError } = useCveDetail(id);
+    const [translated, setTranslated] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (!cve) return;
+        const text = cve.descriptions?.[0]?.value;
+        if (!text) return;
+
+        fetch('https://api.mymemory.translated.net/get?q=' + encodeURIComponent(text) + '&langpair=en|ru&de=ksunnwy@gmail.com')
+        .then(res => res.json())
+        .then(data => setTranslated(data.responseData.translatedText))
+        .catch(() => setTranslated(text));
+    }, [cve]);
 
     if (isLoading) {
         return (
@@ -111,11 +124,9 @@ const CveDetail = () => {
 
                         <div className="mb-10">
                             <h2 className="md:text-2xl text-lg font-bold mb-4">Описание</h2>
-                            {cve.descriptions.map((d, i) => (
-                                <p key={i} className="mb-4 text-gray-800">
-                                    <strong>{d.lang.toUpperCase()}:</strong> {d.value}
-                                </p>
-                            ))}
+                            <p className="mb-4 text-gray-800">
+                                {translated && !translated?.includes('MYMEMORY WARNING') ? translated : cve.descriptions?.[0]?.value ?? 'Нет описания'}
+                            </p>
                         </div>
 
                         {(cvssV30 || cvssV2) && (
@@ -125,15 +136,15 @@ const CveDetail = () => {
                                     {cvssV30 && (
                                         <div className="p-6 border rounded-xl bg-gray-50">
                                             <h3 className="font-semibold mb-2">CVSS v3.0</h3>
-                                            <p>Score: {cvssV30.baseScore}</p>
-                                            <p>Vector: {cvssV30.vectorString}</p>
+                                            <p>Уровень критичности: {cvssV30.baseScore}</p>
+                                            <p>Вектор: {cvssV30.vectorString}</p>
                                         </div>
                                     )}
                                     {cvssV2 && (
                                         <div className="p-6 border rounded-xl bg-gray-50">
                                             <h3 className="font-semibold mb-2">CVSS v2.0</h3>
-                                            <p>Score: {cvssV2.baseScore}</p>
-                                            <p>Vector: {cvssV2.vectorString}</p>
+                                            <p>Уровень критичности: {cvssV2.baseScore}</p>
+                                            <p>Вектор: {cvssV2.vectorString}</p>
                                         </div>
                                     )}
                                 </div>
