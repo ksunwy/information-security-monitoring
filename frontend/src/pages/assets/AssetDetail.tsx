@@ -40,35 +40,100 @@ const AssetDetail = () => {
   const [visibleVulnerabilities, setVisibleVulnerabilities] = useState<Vulnerability[]>([]);
   const [visibleCount, setVisibleCount] = useState(10);
   const containerRef = useRef<HTMLDivElement>(null);
+  const observer = useRef<IntersectionObserver | null>(null);
+  const translatedKeysRef = useRef<Set<string>>(new Set());
 
   useEffect(() => {
-    if (!asset?.vulnerabilities?.length) return;
+    if (!containerRef.current) return;
 
-    asset.vulnerabilities.forEach((vuln) => {
-      const text = vuln.description;
-      if (!text || translations[vuln.cveId!]) return;
+    observer.current = new IntersectionObserver(
+      async (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
 
-      fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|ru&de=ksunnwy@gmail.com`)
-        .then(res => res.json())
-        .then(data => {
-          setTranslations(prev => ({ ...prev, [vuln.cveId!]: data.responseData.translatedText }));
-        })
-        .catch(() => {
-          setTranslations(prev => ({ ...prev, [vuln.cveId!]: text }));
-        });
-    });
-  }, [asset?.vulnerabilities]);
+          const key = entry.target.getAttribute('data-key');
+          const text = entry.target.getAttribute('data-text');
+
+          if (!key || !text) return;
+          if (translatedKeysRef.current.has(key)) return;
+
+          translatedKeysRef.current.add(key);
+
+          try {
+            const res = await fetch(
+              `https://api.mymemory.translated.net/get?q=${encodeURIComponent(
+                text
+              )}&langpair=en|ru&de=ksunnwy@gmail.com`
+            );
+
+            const data = await res.json();
+
+            setTranslations((prev) => ({
+              ...prev,
+              [key]: data.responseData.translatedText ?? text,
+            }));
+          } catch {
+            setTranslations((prev) => ({
+              ...prev,
+              [key]: text ?? 'Нет описания',
+            }));
+          }
+        }
+      },
+      {
+        root: containerRef.current,
+        rootMargin: '0px 0px 200px 0px', // заранее подгружаем чуть ниже экрана
+        threshold: 0.1,
+      }
+    );
+
+    return () => {
+      observer.current?.disconnect();
+    };
+  }, []);
+
+
+  // useEffect(() => {
+  //   if (!asset?.vulnerabilities?.length) return;
+
+  //   asset.vulnerabilities.forEach((vuln) => {
+  //     const text = vuln.description;
+  //     if (!text || translations[vuln.cveId!]) return;
+
+  //     fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|ru&de=ksunnwy@gmail.com`)
+  //       .then(res => res.json())
+  //       .then(data => {
+  //         setTranslations(prev => ({ ...prev, [vuln.cveId!]: data.responseData.translatedText }));
+  //       })
+  //       .catch(() => {
+  //         setTranslations(prev => ({ ...prev, [vuln.cveId!]: text }));
+  //       });
+  //   });
+  // }, [asset?.vulnerabilities]);
 
   useEffect(() => {
     if (!asset?.vulnerabilities?.length) return;
     setVisibleVulnerabilities(asset.vulnerabilities.slice(0, visibleCount));
   }, [asset?.vulnerabilities, visibleCount]);
 
+  const isLoadingMore = useRef(false);
+
   const handleScroll = () => {
-    if (!containerRef.current) return;
+    if (!containerRef.current || isLoadingMore.current) return;
+
+    if (!asset?.vulnerabilities?.length) return;
+    if (visibleCount >= asset.vulnerabilities.length) return;
+
     const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
+
     if (scrollTop + clientHeight >= scrollHeight - 50) {
+      isLoadingMore.current = true;
+
       setVisibleCount(prev => prev + 10);
+
+      setTimeout(() => {
+        isLoadingMore.current = false;
+      }, 300);
     }
   };
 
@@ -210,6 +275,11 @@ const AssetDetail = () => {
 
           <div ref={containerRef} onScroll={handleScroll} className="bg-white/90 backdrop-blur-lg rounded-xl md:rounded-2xl p-4 md:p-6 shadow-lg border border-gray-200 max-h-150 overflow-y-auto">
             <h3 className="text-xl font-bold text-gray-900 mb-4">Уязвимости</h3>
+            {/* {visibleCount < asset.vulnerabilities.length && (
+              <p className="text-center text-gray-500 py-4">
+                Загрузка...
+              </p>
+            )} */}
             {visibleVulnerabilities?.length ? (
               <div className="space-y-4">
                 {visibleVulnerabilities.map((vuln: Vulnerability, idx: number) => (
@@ -238,10 +308,15 @@ const AssetDetail = () => {
                       </p>
                     )}
                     {vuln.description && (
-                      <p className="mt-1 text-sm text-gray-600">
-                        {translations[vuln.cveId!] && !translations[vuln.cveId!]?.includes('MYMEMORY WARNING')
-                        ? translations[vuln.cveId!]
-                        : vuln.description}
+                      <p
+                        ref={(el) => {
+                          if (el && observer.current) observer.current.observe(el);
+                        }}
+                        data-key={vuln.cveId || `${vuln.description}-${idx}`}
+                        data-text={vuln.description}
+                        className="mt-1 text-sm text-gray-600"
+                      >
+                        {translations[vuln.cveId || `${vuln.description}-${idx}`] ?? vuln.description}
                       </p>
                     )}
                   </div>

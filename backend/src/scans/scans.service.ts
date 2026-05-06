@@ -65,6 +65,7 @@ export class ScansService {
     }));
 
     await this.matchServicesToVulns(assetId, ports);
+    await this.runBackendScan(asset, ports);
 
     const prevScans = await this.repo.find({ where: { asset: { id: assetId } }, order: { scannedAt: 'DESC' }, take: 1 });
     const changes = prevScans.length > 0 ? this.computeChanges(prevScans[0].ports, ports) : null;
@@ -343,9 +344,58 @@ export class ScansService {
       default: return 1;
     }
   }
-}
 
+  private async runBackendScan(asset: any, ports: NmapPort[]): Promise<void> {
+    const BACKEND_PORTS = new Set([3000, 4000, 5000, 7000, 8000]);
 
-function sleep(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+    const [ipOnly] = asset.ip.split(':');
+
+    for (const port of ports) {
+      console.log("find a port", port);
+      
+      if (!BACKEND_PORTS.has(port.port)) continue;
+
+      const url = `http://${ipOnly}:${port.port}`;
+
+      try {
+        const resp = await axios.get(`${url}/health`, { timeout: 3000 });
+        console.log("resp health", resp);
+        
+        await this.vulnsService.createVulnerabilityFromCve({
+          assetId: asset.id,
+          cveId: null,
+          description: `Backend health endpoint открыт: ${url}/health (status ${resp.status})`,
+          cvssScore: 3,
+          severity: 'low',
+          fixed: false,
+        });
+
+      } catch (e) {
+        try {
+          const resp = await axios.get(url, { timeout: 3000 });
+          console.log("resp root", resp);
+          await this.vulnsService.createVulnerabilityFromCve({
+            assetId: asset.id,
+            cveId: null,
+            description: `Backend сервис отвечает на ${url} (status ${resp.status})`,
+            cvssScore: 2,
+            severity: 'low',
+            fixed: false,
+          });
+
+        } catch (err) {
+          console.log(err);
+          
+          await this.vulnsService.createVulnerabilityFromCve({
+            assetId: asset.id,
+            cveId: null,
+            description: `Backend порт ${port.port} открыт, но HTTP не отвечает`,
+            cvssScore: 4,
+            severity: 'medium',
+            fixed: false,
+          });
+        }
+      }
+    }
+  }
 }

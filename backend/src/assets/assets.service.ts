@@ -3,10 +3,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Asset } from './asset.entity';
 import { CreateAssetDto } from './dto/create-asset.dto';
+import { LogsService } from 'src/systemLogs/logs.service';
 
 @Injectable()
 export class AssetsService {
-  constructor(@InjectRepository(Asset) private repo: Repository<Asset>) { }
+  constructor(@InjectRepository(Asset) private repo: Repository<Asset>, private logsService: LogsService) { }
 
   async create(dto: CreateAssetDto & { userId: number }): Promise<Asset> {
     const exists = await this.repo.findOne({
@@ -14,11 +15,25 @@ export class AssetsService {
     });
 
     if (exists) {
+      await this.logsService.create({
+        type: 'user_activity',
+        message: `Попытка создать дубликат актива IP=${dto.ip}`,
+        userId: dto.userId,
+      });
+
       throw new BadRequestException('Актив с таким IP уже существует');
     }
 
     const asset = this.repo.create(dto);
-    return this.repo.save(asset);
+    const saved = await this.repo.save(asset);
+
+    await this.logsService.create({
+      type: 'user_activity',
+      message: `Создан актив IP=${dto.ip}`,
+      userId: dto.userId,
+    });
+
+    return saved;
   }
 
   async findAll(): Promise<Asset[]> {
@@ -78,11 +93,20 @@ export class AssetsService {
   }
 
   async update(id: number, dto: Partial<Asset>): Promise<Asset> {
+    await this.logsService.create({
+      type: 'user_activity',
+      message: `Обновлён актив id=${id}`,
+    });
+
     return this.repo.save({ id, ...dto });
   }
 
   async delete(id: number): Promise<void> {
     await this.repo.delete(id);
+    await this.logsService.create({
+      type: 'user_activity',
+      message: `Удалён актив id=${id}`,
+    });
   }
 
   async findRecent(limit = 10): Promise<Asset[]> {
