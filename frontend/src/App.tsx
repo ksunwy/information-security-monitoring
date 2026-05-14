@@ -64,7 +64,7 @@ function App() {
             <Route path="/analytics/vulnerabilities" element={<ProtectedRoute><VulnAnalytics /></ProtectedRoute>} />
             <Route path="/analytics/assets" element={<ProtectedRoute><AssetAnalytics /></ProtectedRoute>} />
             <Route path="/analytics/trends" element={<ProtectedRoute><TrendsAnalytics /></ProtectedRoute>} />
-            <Route path="/analytics/reports" element={<ProtectedRoute><ReportAnalytics /></ProtectedRoute>} />
+            {/* <Route path="/analytics/reports" element={<ProtectedRoute><ReportAnalytics /></ProtectedRoute>} /> */}
 
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

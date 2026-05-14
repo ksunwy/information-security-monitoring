@@ -55,7 +55,7 @@ export class ReportsService {
       doc.fontSize(12).text('Нет обнаруженных уязвимостей');
     } else {
       vulns.forEach((vuln, index) => {
-        doc.fontSize(12).text(`${index + 1}. ${vuln.cveId || 'Нет CVE'}`);
+        doc.fontSize(12).text(`${index + 1}. ${vuln.id || 'Нет CVE'}`);
         doc.text(`CVSS: ${vuln.cvssScore || 'N/A'} (${vuln.severity || 'N/A'})`);
         doc.text(`Статус: ${vuln.fixed ? 'Исправлена' : 'Активна'}`);
         doc.text(`Описание: ${vuln.description || 'Нет описания'}`);
@@ -110,11 +110,10 @@ export class ReportsService {
     const csvWriter = createObjectCsvWriter({
       path: filePath,
       header: [
-        { id: 'cveId', title: 'CVE ID' },
+        { id: 'id', title: 'ID' },
         { id: 'description', title: 'Description' },
         { id: 'cvssScore', title: 'CVSS Score' },
-        { id: 'criticality', title: 'Criticality' },
-        { id: 'fixed', title: 'Fixed' },
+        { id: 'severity', title: 'Severity' },
         { id: 'detectedAt', title: 'Detected at' },
       ],
       fieldDelimiter: ';',

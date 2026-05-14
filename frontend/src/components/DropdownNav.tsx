@@ -74,14 +74,14 @@ const DropdownNav = () => {
           >
             Тренды
           </Link>
-          <Link
+          {/* <Link
             to="/analytics/reports"
             className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
             role="menuitem"
             onClick={() => setIsOpen(false)}
           >
             Отчёты
-          </Link>
+          </Link> */}
         </div>
       </div>
     </div>
