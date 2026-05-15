@@ -93,10 +93,12 @@ const AdminDashboard = () => {
                     <div className=" backdrop-blur-lg p-4 md:p-8 bg-(--white) text-(--dark) rounded-[10px] shadow-[0px_21.7886px_38.8109px_rgba(9,14,34,0.1),inset_-10.8943px_1.36179px_17.7032px_#9BB0BC] border border-gray-200 mb-4 md:mb-12">
                         <div className="flex md:flex-row flex-col gap-2 md:justify-between md:items-center mb-4 md:mb-6">
                             <h3 className="text-xl font-bold text-[#334e6c]">Обзор безопасности</h3>
-                            <select className="md:px-4 px-3 md:py-3 py-2 md:text-base text-sm border border-gray-400 rounded-lg h-10 md:h-12.5 focus:outline-none focus:ring-2 focus:ring-blue-500 min-w-45">
+                           {/*
+                           <select className="md:px-4 px-3 md:py-3 py-2 md:text-base text-sm border border-gray-400 rounded-lg h-10 md:h-12.5 focus:outline-none focus:ring-2 focus:ring-blue-500 min-w-45">
                                 <option className='md:text-base text-sm'>Неделя</option>
                                 <option className='md:text-base text-sm'>Месяц</option>
                             </select>
+                           */} 
                         </div>
 
                         <div className="h-96">
