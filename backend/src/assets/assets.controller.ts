@@ -59,9 +59,12 @@ export class AssetsController {
     description: 'Список всех активов с их сканами и уязвимостями',
     type: [Asset],
   })
-  async findAll(): Promise<Asset[]> {
-    return this.service.findAll();
-  }
+async findAll(@Request() req): Promise<Asset[]> {
+  return this.service.findAll(
+    req.user.id,
+    req.user.role === 'admin',
+  );
+}
 
   @Get(':id')
   @ApiOperation({ summary: 'Получить информацию по одному активу' })

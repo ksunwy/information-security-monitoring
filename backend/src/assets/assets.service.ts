@@ -36,8 +36,11 @@ export class AssetsService {
     return saved;
   }
 
-  async findAll(): Promise<Asset[]> {
-    const assets = await this.repo.find({ relations: ['scans', 'vulnerabilities'] });
+  async findAll(userId?: number, isAdmin = false): Promise<Asset[]> {
+    const assets = await this.repo.find({
+      where: isAdmin ? {} : { userId: userId },
+      relations: ['scans', 'vulnerabilities'],
+    });
 
     return assets.map((asset) => {
       const criticalityOrder = { low: 0, medium: 1, high: 2, critical: 3 };
@@ -60,7 +63,7 @@ export class AssetsService {
         status,
         lastScan,
         group: 'Веб-серверы',
-        owner: 'Админ',
+        owner: asset.userId,
       };
     });
   }

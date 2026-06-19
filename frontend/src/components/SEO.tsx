@@ -1,13 +1,8 @@
 import { Helmet } from "react-helmet-async";
 
-const SEO = ({
-  title,
-  description,
-  url,
-  image = "/og-image.png",
-  noindex = false,
-}: {title: string, description: string, url: string, image?: string, noindex?: boolean}) => {
-  const siteName = "Мониторинг ИБ";
+const SEO = ({ title, description, url, image = "/og-image.png", noindex = false,}
+: {title: string, description: string, url: string, image?: string, noindex?: boolean}) => {
+  const siteName = "ИС для автоматизации аудита";
   const fullTitle = `${title} | ${siteName}`;
 
   return (

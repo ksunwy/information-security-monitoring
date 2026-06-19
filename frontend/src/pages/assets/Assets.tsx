@@ -1,4 +1,5 @@
 import { useAssets } from '../../hooks/useAssets';
+import { useAuth } from '../../hooks/useAuth';
 import { Link, useNavigate } from 'react-router-dom';
 import { PlusIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import Header from '../../components/Header';
@@ -6,6 +7,7 @@ import { format } from 'date-fns';
 import Footer from '../../components/Footer';
 import SEO from '../../components/SEO';
 import type { Asset } from '../../types';
+import { useUsers } from '../../hooks/useUsers';
 
 const Assets = () => {
   const {
@@ -23,6 +25,8 @@ const Assets = () => {
   } = useAssets();
 
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const { data: users = [] } = useUsers();
 
   if (isLoading) {
     return <div className="text-center py-10 text-gray-600">Загрузка активов...</div>;
@@ -31,7 +35,7 @@ const Assets = () => {
   if (error) {
     return <div className="text-center py-10 text-red-600">Ошибка загрузки: {(error as Error).message}</div>;
   }
-console.log(assets);
+  console.log(assets);
 
   return (
     <>
@@ -87,15 +91,23 @@ console.log(assets);
               <option value="critical">Критическая</option>
             </select>
 
-            <select
-              value={filters.owner}
-              onChange={(e) => setFilters({ ...filters, owner: e.target.value })}
-              className="px-4 py-3 md:text-base text-sm border border-gray-400 rounded-lg h-12.5 focus:outline-none focus:ring-2 focus:ring-blue-500 min-w-40"
-            >
-              <option value="">Владелец</option>
-              <option value="Админ">Админ</option>
-              <option value="Команда">Команда</option>
-            </select>
+            {user?.role === 'admin' && (
+              <select
+                value={filters.owner}
+                onChange={(e) =>
+                  // @ts-ignore
+                  setFilters({ ...filters, owner: Number(e.target.value) })
+                }
+                className="px-4 py-3 border border-gray-400 rounded-lg h-12.5 min-w-40"
+              >
+                <option value="">Владелец</option>
+                {users.map((user: any) => (
+                  <option key={user.id} value={user.id}>
+                    {user.login || user.name}
+                  </option>
+                ))}
+              </select>
+            )}
 
             <select
               value={filters.status}
